@@ -34,8 +34,8 @@ input::placeholder {
 }
 
 button > p {
-	padding-left: 0;
-	transition : all 0.2s ease-in-out;
+	padding-left : 0;
+	transition   : all 0.2s ease-in-out;
 }
 
 button.secondary-btn {
@@ -49,12 +49,12 @@ input:hover {
 }
 
 button:hover > p {
-	padding-left: 8px;
-	transition : all 0.4s ease-in-out;
+	padding-left : 8px;
+	transition   : all 0.4s ease-in-out;
 }
 
 #login-form-container:hover {
-	box-shadow : 0 0 180px 0 rgba(0, 98, 255, 0.3);
+	box-shadow : 0 0 180px 0 rgba(0, 98, 255, 0.25);
 	transition : box-shadow 0.4s ease-in-out
 }
 
@@ -63,6 +63,8 @@ input:focus {
 	outline    : none;
 	transition : all 0.4s ease-in-out;
 }
+
+
 
 /* ----- Letter Spacing */
 h1 {
@@ -82,8 +84,8 @@ input[type='text'], input[type='email'], input[type='password'] {
 	width         : 430px;
 	height        : 528px;
 	border-radius : 8px;
-	box-shadow : 0 0 9px 0 rgba(0, 98, 255, 0);
-	transition : box-shadow 0.4s ease-in-out
+	box-shadow    : 0 0 9px 0 rgba(0, 98, 255, 0);
+	transition    : box-shadow 0.4s ease-in-out
 }
 
 /* Add gap to Inputs (not first) */
@@ -115,7 +117,7 @@ div:has(> input[type='checkbox']) {
 }
 
 input[type='checkbox'] {
-	accent-color: var(--primary-color);
+	accent-color : var(--primary-color);
 	margin-right : 8px;
 }
 
@@ -134,3 +136,8 @@ input[type='submit'], button[type='submit'] {
 	text-align       : left;
 }
 
+/* ----- disabled */
+button:disabled {
+	background-color : var(--text-3);
+	color            : var(--white);
+}
