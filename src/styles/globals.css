@@ -3,25 +3,134 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+	--white           : #FFFFFF;
+	--primary-color   : #0F62FE;
+	--secondary-color : #393939;
+	--text-1          : #161616;
+	--text-2          : #525252;
+	--text-3          : #A8A8A8;
+	--text-4          : #FFFFFF;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+/* ----- General */
+html, body, #__next, main {
+	padding : 0;
+	margin  : 0;
+	height  : 100%;
+	width   : 100%;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+label {
+	font-size   : 12px;
+	line-height : 16px;
+	color       : var(--text-2);
+	transition  : color 0.2s ease-in-out;
 }
+
+input::placeholder {
+	font-weight : lighter;
+	line-height : 20px;
+	color       : var(--text-3);
+}
+
+button > p {
+	padding-left: 0;
+	transition : all 0.2s ease-in-out;
+}
+
+button.secondary-btn {
+	background-color : var(--secondary-color);
+	color            : var(--white);
+}
+
+/* ----- hover */
+input:hover {
+	transition : all 0.3s ease-in-out;
+}
+
+button:hover > p {
+	padding-left: 8px;
+	transition : all 0.4s ease-in-out;
+}
+
+#login-form-container:hover {
+	box-shadow : 0 0 180px 0 rgba(0, 98, 255, 0.3);
+	transition : box-shadow 0.4s ease-in-out
+}
+
+/* ----- focus */
+input:focus {
+	outline    : none;
+	transition : all 0.4s ease-in-out;
+}
+
+/* ----- Letter Spacing */
+h1 {
+	letter-spacing : 3px;
+}
+
+label {
+	letter-spacing : 0.32px;
+}
+
+input[type='text'], input[type='email'], input[type='password'] {
+	letter-spacing : 0.16px;
+}
+
+/* ----- Form Styles */
+#login-form-container {
+	width         : 430px;
+	height        : 528px;
+	border-radius : 8px;
+	box-shadow : 0 0 9px 0 rgba(0, 98, 255, 0);
+	transition : box-shadow 0.4s ease-in-out
+}
+
+/* Add gap to Inputs (not first) */
+div:has(> input[type='text']:not(:first-child), > input[type='email']:not(:first-child), > input[type='password']:not(:first-child)) {
+	margin-top : 20px;
+}
+
+/* Text inputs */
+div:has(> input[type='text'], > input[type='email'], > input[type='password']) {
+	display        : flex;
+	flex-direction : column;
+}
+
+/* Paint label if input is focused */
+div:has(> input[type='text']:focus, > input[type='email']:focus, > input[type='password']:focus) label {
+	color : var(--primary-color);
+}
+
+/* Hover Text inputs */
+input[type='text']:hover, input[type='email']:hover, input[type='password']:hover {
+	border-bottom : 1.7px solid var(--primary-color);
+}
+
+/* Non text inputs */
+div:has(> input[type='checkbox']) {
+	display        : flex;
+	flex-direction : row;
+	align-content  : center;
+}
+
+input[type='checkbox'] {
+	accent-color: var(--primary-color);
+	margin-right : 8px;
+}
+
+input[type='text'], input[type='email'], input[type='password'] {
+	border        : none;
+	border-bottom : 1.7px solid var(--text-3);
+	padding       : 7px 16px;
+	font-weight   : 300;
+}
+
+input[type='submit'], button[type='submit'] {
+	background-color : var(--primary-color);
+	color            : var(--white);
+	padding          : 13px 14px;
+	border           : none;
+	text-align       : left;
+}
+
