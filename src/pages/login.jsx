@@ -1,7 +1,13 @@
 import React, {useEffect} from 'react';
 import {useState} from 'react';
+import {signIn} from "next-auth/react";
+import {useRouter} from "next/router";
 
 function Login() {
+    /* Hooks */
+    const router = useRouter();
+
+    /* State */
     const [payload, setPayload] = useState({
         email: '',
         password: '',
@@ -10,9 +16,11 @@ function Login() {
     const [error, setError] = useState({
         email: '',
         password: '',
+        general: ''
     })
     const [canSubmit, setCanSubmit] = useState(false);
 
+    /* Validation */
     const validateEmail = (email) => {
         let _error = '';
         if (email === undefined || email === '') {
@@ -58,48 +66,77 @@ function Login() {
         }
     }
 
-    const handleChange = (e) => {
+    /* Event Handlers */
+    const handleOnBlur = (e) => {
+        const {name, value} = e.target;
+
+        if (name === 'email') validateEmail(value);
+        else if (name === 'password') validatePassword(value);
+    }
+    const handleOnChange = (e) => {
         const {name, value} = e.target;
         const newPayload = {...payload, [name]: value};
         setPayload(newPayload)
-
-        if (name === 'email') validateEmail(value);
-        else if (name === 'password') validatePassword(newPayload.password);
     }
-
-    const handleToggle = (e) => {
+    const handleToggle = () => {
         setPayload({
             ...payload,
             rememberMe: !payload.rememberMe
         })
 
     }
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(payload);
 
-        // TODO: call api
+        setError({
+            email: '',
+            password: '',
+            general: ''
+        })
+
+        validateEmail(payload.email);
+        validatePassword(payload.password);
+
+        return await signIn("credentials", {
+            redirect: false,
+            email: payload.email,
+            password: payload.password,
+
+        }).then(({ok, error}) => {
+            if (ok) {
+                router.push('/')
+            } else {
+                console.log(error);
+                setError({
+                    ...error,
+                    general: error === "CredentialsSignin" ? "Credenciales incorrectas" : "Error desconocido: " + error
+                })
+                setPayload({
+                    ...payload,
+                    password: ''
+                });
+            }
+        })
+
     }
 
+    /* Effects */
     useEffect(() => {
-        console.log(error)
-
-        if (error.email === '' && error.password === '' && payload.email !== '' && payload.password !== '') {
+        if (payload.email !== '' && payload.password !== '' && error.email === '' && error.password === '') {
             setCanSubmit(true);
         } else {
             setCanSubmit(false);
         }
-    }, [error]);
+    }, [error, payload]);
 
-
+    /* Render */
     return (
         <main id="login" className={"bg-gray-100 w-full"}>
             <div>
 
             </div>
-            <div id={"login-form-container"}
-                 className={"bg-white border-2 border-gray-200 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 px-14 pt-16 pb-14 flex flex-col justify-between"}>
+            <form id={"login-form-container"}
+                  className={"bg-white border-2 border-gray-200 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 px-14 pt-16 pb-14 flex flex-col justify-between"}>
                 <h1 className={"text-center font-bold text-5xl"}>LOG IN</h1>
                 <div>
                     <div>
@@ -108,7 +145,8 @@ function Login() {
                                name="email"
                                id="email"
                                placeholder="admin@gmail.com"
-                               onBlur={handleChange} />
+                               onChange={handleOnChange}
+                               onBlur={handleOnBlur} />
                         <p className={"text-xs text-red-600"}>{error.email}</p>
                     </div>
                     <div>
@@ -117,7 +155,8 @@ function Login() {
                                name="password"
                                id="password"
                                placeholder="Password"
-                               onBlur={handleChange} />
+                               onChange={handleOnChange}
+                               onBlur={handleOnBlur} />
                         <p className={"text-xs text-red-600"}>{error.password}</p>
                     </div>
                 </div>
@@ -126,17 +165,21 @@ function Login() {
                         <input type="checkbox" name="rememberMe" id="rememberMe" onChange={handleToggle} />
                         <label htmlFor="rememberMe">Recuerdame por 7 días</label>
                     </div>
-                    <button className={"w-full flex-row my-5"}
-                            type="submit"
-                            onClick={handleSubmit}
-                            disabled={!canSubmit}>
-                        <p>Entrar</p></button>
+                    <div>
+                        <p className={"text-xs text-red-600 text-right"}>{error.general}</p>
+                        <button className={"w-full flex-row my-5"}
+                                type="submit"
+                                onClick={handleSubmit}
+                                disabled={!canSubmit}>
+                            <p>Entrar</p>
+                        </button>
+                    </div>
                     <aside>
                         <p className={"text-gray-400 text-sm"}>* Si olvido su contraseña, contacte al equipo de
                                                                desarrollo para restablecerla</p>
                     </aside>
                 </div>
-            </div>
+            </form>
             <div>
 
             </div>
