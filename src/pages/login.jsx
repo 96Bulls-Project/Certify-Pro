@@ -101,7 +101,6 @@ function Login() {
             redirect: false,
             email: payload.email,
             password: payload.password,
-
         }).then(({ok, error}) => {
             if (ok) {
                 router.push('/')

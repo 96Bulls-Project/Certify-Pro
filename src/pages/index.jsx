@@ -1,11 +1,14 @@
 import {useSession, signIn, signOut} from "next-auth/react"
+import React from "react";
+import Layout from "@/components/Layout";
 
 export default function Home() {
-    const {data: session, status } = useSession({
+    const {data: session, status} = useSession({
         required: true,
         onUnauthenticated() {
             signIn().then(r => {
                 console.log(r);
+                return r;
             });
         }
     });
@@ -17,10 +20,11 @@ export default function Home() {
     console.log(session);
     if (session?.user) {
         return (
-            <>
-                Signed in as {JSON.stringify(session.user)} <br />
-                <button onClick={() => signOut()}>Sign out</button>
-            </>
+            <Layout user={session?.user}>
+                <div>
+                    Signed in as {JSON.stringify(session.user)} <br />
+                </div>
+            </Layout>
         )
     }
 

@@ -2,10 +2,22 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes fade-in {
+	from {
+		opacity : 0;
+	}
+	to {
+		opacity : 1;
+	}
+}
+
 :root {
 	--white           : #FFFFFF;
 	--primary-color   : #0F62FE;
 	--secondary-color : #393939;
+	--gray-1          : #F2F2F7;
+	--gray-2          : #F5F5F5;
+	--gray-5          : #D8D8DC;
 	--text-1          : #161616;
 	--text-2          : #525252;
 	--text-3          : #A8A8A8;
@@ -63,8 +75,6 @@ input:focus {
 	outline    : none;
 	transition : all 0.4s ease-in-out;
 }
-
-
 
 /* ----- Letter Spacing */
 h1 {
@@ -140,4 +150,157 @@ input[type='submit'], button[type='submit'] {
 button:disabled {
 	background-color : var(--text-3);
 	color            : var(--white);
+}
+
+/* ----- Navbar */
+#navbar {
+	position         : relative;
+	background-color : var(--white);
+	box-shadow       : 0 2px 7px 0 rgba(0, 98, 255, 0.07);
+	height           : 45px;
+	width            : 100%;
+	border-bottom    : solid 1px var(--gray-5);
+}
+
+#navbar .wrapper {
+	height : 100%;
+}
+
+#navbar .logo {
+	height : 100%;
+}
+
+#navbar .logo img {
+	height : 95%;
+}
+#navbar .wrapper {
+	height  : 100%;
+	padding : 0 100px;
+}
+
+#navbar .content {
+	height          : 100%;
+	display         : flex;
+	align-items     : center;
+	justify-content : space-between;
+}
+
+#navbar .content .center {
+	position    : absolute;
+	height      : 100%;
+	display     : flex;
+	align-items : center;
+	left        : 50%;
+	bottom      : 0;
+	transform   : translateX(-50%);
+}
+
+#navbar-search {
+	display          : flex;
+	flex-direction   : row;
+	height           : 100%;
+	background-color : var(--gray-2);
+}
+
+#navbar-search input {
+	background : none;
+	height     : 100%;
+	width      : 350px;
+}
+
+#navbar .content .right {
+	display         : flex;
+	align-items     : center;
+	width           : 70px;
+	justify-content : space-between;
+}
+
+#navbar .icon img {
+	width  : 25px;
+	height : 25px;
+}
+
+/* ------- Layout */
+#layout {
+	height : calc(100% - 45px);
+}
+
+/* ------- Menu */
+#menu {
+	left             : 0;
+	top              : 0;
+	height           : 100%;
+	width            : 60px;
+	background-color : var(--gray-2);
+	padding          : 35px 10px;
+	transition       : all 0.4s ease-in-out;
+}
+
+#menu.active {
+	width      : 200px;
+	padding    : 35px 20px;
+	transition : all 0.4s ease-in-out;
+}
+
+#menu-top {
+	height        : 40px;
+	border-bottom : solid 1px var(--gray-5);
+}
+
+#menu.active #menu-top img {
+	margin-right : 0;
+}
+
+#menu img {
+	width  : 25px;
+	height : 25px;
+	margin : auto;
+}
+
+#menu-items {
+	width          : fit-content;
+	margin         : 20px 0;
+	padding-left   : 7px;
+	display        : flex;
+	flex-direction : column;
+	gap            : 25px;
+	
+}
+
+#menu-bottom {
+	height          : 60px;
+	border-top      : solid 1px var(--gray-5);
+	display         : flex;
+	flex-direction  : column;
+	justify-content : flex-end;
+}
+
+#menu.active #menu-items {
+	margin-left : 0;
+}
+
+#menu.active #menu-items img {
+	margin-left  : 0;
+	margin-right : 15px;
+	transition   : all 0.4s ease-in-out;
+}
+
+#menu.active #menu-bottom img {
+	margin-left  : 0;
+	margin-right : 15px;
+	transition   : all 0.4s ease-in-out;
+}
+
+.menu-item {
+	display        : flex;
+	flex-direction : row;
+}
+
+#menu.active p {
+	animation-name            : fade-in;
+	animation-duration        : 0.4s;
+	animation-timing-function : ease-in-out;
+	animation-delay           : 0s;
+	animation-iteration-count : 1;
+	animation-fill-mode       : forwards;
 }

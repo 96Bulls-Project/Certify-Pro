@@ -18,7 +18,6 @@ export const authOptions = {
                 // example to get a doc in collection
                 return await collection.findOne(
                     {email: email, password: password},
-                    {email: 1, username: 1, _id: 1}
                 ).then((doc) => {
                     console.log('doc: ', doc)
                     if (!doc) {
