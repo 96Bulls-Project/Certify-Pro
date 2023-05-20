@@ -22,6 +22,8 @@
 	--text-2          : #525252;
 	--text-3          : #A8A8A8;
 	--text-4          : #FFFFFF;
+	--base-700        : #4A5468;
+	--base-500        : #A0ABC0;
 }
 
 /* ----- General */
@@ -55,25 +57,10 @@ button.secondary-btn {
 	color            : var(--white);
 }
 
-/* ----- hover */
-input:hover {
-	transition : all 0.3s ease-in-out;
-}
-
-button:hover > p {
-	padding-left : 8px;
-	transition   : all 0.4s ease-in-out;
-}
-
-#login-form-container:hover {
-	box-shadow : 0 0 180px 0 rgba(0, 98, 255, 0.25);
-	transition : box-shadow 0.4s ease-in-out
-}
-
-/* ----- focus */
-input:focus {
-	outline    : none;
-	transition : all 0.4s ease-in-out;
+h1 {
+	font-size   : 56px;
+	font-weight : bold;
+	line-height : 32px;
 }
 
 /* ----- Letter Spacing */
@@ -144,6 +131,11 @@ input[type='submit'], button[type='submit'] {
 	padding          : 13px 14px;
 	border           : none;
 	text-align       : left;
+}
+
+/* ----- grid */
+.c-full {
+	grid-column : 1 / -1;
 }
 
 /* ----- disabled */
@@ -225,6 +217,18 @@ button:disabled {
 	height : calc(100% - 45px);
 }
 
+#main-wrapper {
+	height                : 100%;
+	width                 : 1100px;
+	padding-top           : 70px;
+	margin                : auto;
+	display               : grid;
+	grid-template-columns : repeat(6, 1fr);
+	grid-template-rows    : repeat(8, 1fr);
+	column-gap            : 25px;
+	row-gap               : 25px;
+}
+
 /* ------- Menu */
 #menu {
 	left             : 0;
@@ -304,3 +308,81 @@ button:disabled {
 	animation-iteration-count : 1;
 	animation-fill-mode       : forwards;
 }
+
+/* ------- Header */
+#header-container {
+	display         : flex;
+	flex-direction  : row;
+	justify-content : space-between;
+	border-bottom   : solid 2px var(--gray-5);
+	padding-bottom  : 8px;
+	grid-column     : 1 / 7;
+	grid-row        : 1 / 2;
+	align-items: center;
+}
+
+/* ------- Infinite Scroll */
+.infinite-scroll {
+	height                : fit-content;
+	grid-column           : 1 / span 6;
+	grid-auto-rows        : 2fr;
+	display               : grid;
+	grid-template-columns : repeat(3, 1fr);
+	column-gap            : 30px;
+}
+
+/* ------- Summary Card */
+.summary-card {
+	grid-column-gap : 20px;
+	height          : fit-content;
+	justify-content : space-between;
+	align-content   : space-between;
+	padding         : 10px 20px;
+	border-radius   : 10px;
+	border          : solid 1px var(--gray-5);
+}
+
+.summary-card .graph {
+	height : 65px;
+	width  : 110px;
+}
+
+.summary-card .bottom-info {
+	align-items : flex-end;
+}
+
+.summary-card .see-more {
+	color       : var(--text-2);
+	font-weight : bold;
+	transition  : all 0.4s ease-in-out;
+}
+
+/* ----- hover */
+input:hover {
+	transition : all 0.3s ease-in-out;
+}
+
+button:hover > p {
+	padding-left : 8px;
+	transition   : all 0.4s ease-in-out;
+}
+
+#login-form-container:hover {
+	box-shadow : 0 0 180px 0 rgba(0, 98, 255, 0.25);
+	transition : box-shadow 0.4s ease-in-out
+}
+
+.summary-card .see-more:hover {
+	color     : var(--primary-color);
+	transform : scale(1.2);
+}
+
+/* ----- focus */
+input:focus {
+	outline    : none;
+	transition : all 0.4s ease-in-out;
+}
+
+
+
+

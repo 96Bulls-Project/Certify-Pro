@@ -8,7 +8,7 @@ function Layout({user, children}) {
             <Navbar />
             <div id="layout" className="w-full flex flex-row">
                 <Menu user={user}/>
-                <div>
+                <div id="main-wrapper">
                 {children}
                 </div>
             </div>

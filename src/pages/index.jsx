@@ -1,6 +1,10 @@
 import {useSession, signIn, signOut} from "next-auth/react"
 import React from "react";
 import Layout from "@/components/Layout";
+import PageTitle from "../components/PageTitle";
+import InfiniteScroll from "@/components/InfiniteScroll";
+import {faker} from "@faker-js/faker";
+import SummaryCard from "@/components/SummaryCards/SummaryCard";
 
 export default function Home() {
     const {data: session, status} = useSession({
@@ -17,13 +21,60 @@ export default function Home() {
         return <p>Loading...</p>
     }
 
-    console.log(session);
+    const cardsTest = [
+        {
+            icon: "fas fa-users",
+            title: "Empleados",
+            subtitle: "Cantidad de Empleados",
+            data: [
+                {value: faker.number.int({min: 0, max: 500})},
+                {value: faker.number.int({min: 0, max: 500})},
+                {value: faker.number.int({min: 0, max: 500})},
+                {value: faker.number.int({min: 0, max: 500})},
+                {value: faker.number.int({min: 0, max: 500})},
+                {value: faker.number.int({min: 0, max: 500})},
+            ],
+            dataType: "mensual",
+        },
+        {
+            icon: "fas fa-users",
+            title: "Empleados",
+            subtitle: "Cantidad de Empleados",
+            data: [
+                {value: faker.number.int({min: 0, max: 500})},
+                {value: faker.number.int({min: 0, max: 500})},
+                {value: faker.number.int({min: 0, max: 500})},
+                {value: faker.number.int({min: 0, max: 500})},
+                {value: faker.number.int({min: 0, max: 500})},
+                {value: faker.number.int({min: 0, max: 500})},
+            ],
+            dataType: "mensual",
+        },
+        {
+            icon: "fas fa-users",
+            title: "Empleados",
+            subtitle: "Cantidad de Empleados",
+            data: [
+                {value: faker.number.int({min: 0, max: 500})},
+                {value: faker.number.int({min: 0, max: 500})},
+                {value: faker.number.int({min: 0, max: 500})},
+                {value: faker.number.int({min: 0, max: 500})},
+                {value: faker.number.int({min: 0, max: 500})},
+                {value: faker.number.int({min: 0, max: 500})},
+            ],
+            dataType: "mensual",
+        }
+    ]
+
     if (session?.user) {
         return (
             <Layout user={session?.user}>
-                <div>
-                    Signed in as {JSON.stringify(session.user)} <br />
-                </div>
+                <PageTitle>Bienvenid@ {session.user.name}</PageTitle>
+                <InfiniteScroll>
+                    {cardsTest.map((card, index) => (
+                        <SummaryCard key={index} info={card} />
+                    ))}
+                </InfiniteScroll>
             </Layout>
         )
     }
