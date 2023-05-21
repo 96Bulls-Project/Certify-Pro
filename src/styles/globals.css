@@ -343,8 +343,8 @@ button:disabled {
 }
 
 .summary-card .graph {
-	height : 65px;
-	width  : 110px;
+	height : 55px;
+	width  : 100px;
 }
 
 .summary-card .bottom-info {

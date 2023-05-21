@@ -10,8 +10,8 @@ ChartJS.register(
     Filler,
     Title,
 );
-
-function SummaryCard({info}) {
+/* type = certificates | employees  */
+function SummaryCard({info, type='employees'}) {
 
     const options = {
         responsive: true,
@@ -75,10 +75,10 @@ function SummaryCard({info}) {
 
     return (
         <div className="summary-card">
-            <div className="flex justify-between">
+            <div className="flex justify-between mb-4">
                 <div className="flex">
                     <div>
-                        i
+                        <img className={"mr-3"} src={"/icons/" + type + "_summary_card.png"} width={40} height={40} />
                     </div>
                     <div>
                         <p className={"font-bold text-gray-700"}>

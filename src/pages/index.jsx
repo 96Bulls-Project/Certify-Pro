@@ -74,7 +74,7 @@ export default function Home() {
                 <PageTitle>Bienvenid@ {session.user.name}</PageTitle>
                 <InfiniteScroll>
                     {cardsTest.map((card, index) => (
-                        <SummaryCard key={index} info={card} />
+                        <SummaryCard key={index} info={card} type={'employees'} />
                     ))}
                 </InfiniteScroll>
             </Layout>
