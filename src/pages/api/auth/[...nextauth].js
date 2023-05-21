@@ -39,9 +39,15 @@ export const authOptions = {
             return baseUrl
         },
         async session({session, user, token}) {
+            session.accessToken = token.accessToken
+            session.user = token.user
             return session
         },
         async jwt({token, user, account, profile, isNewUser}) {
+            if (user) {
+                token.accessToken = user._id;
+                token.user = { email: user.email, name: user.username}
+            }
             return token
         },
     },

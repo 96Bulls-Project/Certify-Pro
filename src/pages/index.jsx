@@ -66,6 +66,8 @@ export default function Home() {
         }
     ]
 
+    console.log("user: ", session.user);
+
     if (session?.user) {
         return (
             <Layout user={session?.user}>
