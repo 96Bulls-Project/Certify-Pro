@@ -96,7 +96,7 @@ export default function Home() {
                         <SummaryCard key={index} info={card} type={card.dataOf} />
                     ))}
                 </InfiniteScroll>
-                <div className="grid grid-cols-2 gap-8 c-full row-start-4">
+                <div className="grid grid-cols-2 gap-8 c-full row-start-3">
                     <TopCard data={top5Eployees} fieldsMap={{
                         "title": "UserId",
                         "subtitle": "WorkLocation",

@@ -41,7 +41,7 @@ function DetailCard({data, fieldsMap}) {
                     </p>
                 </div>
                 <div>
-                    <p className="text-center font-semibold text-xl ">
+                    <p className="text-center font-semibold text-xl text-gray-600">
                         {data[fieldsMap.value]}
                     </p>
                 </div>

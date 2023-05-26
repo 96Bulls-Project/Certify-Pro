@@ -62,7 +62,7 @@ function TopCard({title, description, data, buttonDetails = {text: "Ver detalles
                 Filtro
             </div>
             <hr />
-            <div>
+            <div className={"h-fit"}>
                 {
                     data?.map((cardData) => {
                         return (
@@ -73,7 +73,7 @@ function TopCard({title, description, data, buttonDetails = {text: "Ver detalles
                 }
 
             </div>
-            <button className="bg-blue-500 w-full h-10 text-white">
+            <button className="bg-blue-500 w-full h-10 text-white bottom-0">
                 {buttonDetails.text}
             </button>
 
