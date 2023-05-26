@@ -74,7 +74,7 @@ function SummaryCard({info, type='employees'}) {
     };
 
     return (
-        <div className="summary-card">
+        <div className="card summary-card">
             <div className="flex justify-between mb-4">
                 <div className="flex">
                     <div>
