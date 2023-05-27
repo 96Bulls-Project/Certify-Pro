@@ -18,7 +18,7 @@ export default function Home() {
             });
         }
     });
-
+    const [isFetchingData, setIsFetchingData] = useState(true);
     const [top5Eployees, setTop5Employees] = useState([]);
     const [top5Certificates, setTop5Certificates] = useState([]);
 
@@ -33,8 +33,7 @@ export default function Home() {
             console.log(response.data)
             setTop5Certificates(response.data);
         }
-        getTop5Employees();
-        getTop5Certificates();
+        getTop5Employees().then(() => getTop5Certificates().then(() => setIsFetchingData(false)));
     }, []);
 
 
@@ -88,12 +87,13 @@ export default function Home() {
     ]
 
     if (session?.user) {
+
         return (
             <Layout user={session?.user}>
                 <PageTitle>Bienvenid@ {session.user.name}</PageTitle>
                 <InfiniteScroll>
                     {cardsTest.map((card, index) => (
-                        <SummaryCard key={index} info={card} type={card.dataOf} />
+                        <SummaryCard key={index} info={card} type={card.dataOf} loading={isFetchingData} />
                     ))}
                 </InfiniteScroll>
                 <div className="grid grid-cols-2 gap-8 c-full row-start-3">
@@ -101,12 +101,12 @@ export default function Home() {
                         "title": "UserId",
                         "subtitle": "WorkLocation",
                         "value": "TotalCertifications"
-                    }} />
+                    }} loading={isFetchingData} />
                     <TopCard data={top5Certificates} fieldsMap={{
                         "title": "Name",
                         "subtitle": "Skills",
                         "value": "Type"
-                    }}/>
+                    }} loading={isFetchingData} />
                 </div>
             </Layout>
         )

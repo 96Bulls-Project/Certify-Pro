@@ -32,7 +32,7 @@ function DetailCard({data, fieldsMap}) {
             <div className="flex  content-between justify-between">
                 <div>
                     <p>
-                        {data[fieldsMap.title]}
+                        {data[fieldsMap.title] || "Cargando..."}
                     </p>
                     <p>
                         {

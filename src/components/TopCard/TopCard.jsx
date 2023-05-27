@@ -43,19 +43,21 @@ const usersTestData = [
     },
 ]
 
-function TopCard({title, description, data, buttonDetails = {text: "Ver detalles", link: "/"}, fieldsMap}) {
+function TopCard({title, description, data, buttonDetails = {text: "Ver detalles", link: "/"}, fieldsMap, loading}) {
     return (
         <div className="card ">
             <div className="p-5">
-                <div>
-                    <p className={"font-bold text-gray-700"}>
-                        Title
+                {loading ? <p>Cargando...</p> :
+                    <div>
 
-                    </p>
-                    <p className={"text-sm text-gray-500"}>
-                        this is the subtitle
-                    </p>
-                </div>
+                        <p className={"font-bold text-gray-700"}>
+                            Title
+                        </p>
+                        <p className={"text-sm text-gray-500"}>
+                            this is the subtitle
+                        </p>
+                    </div>}
+
             </div>
             <hr />
             <div className={"px-5 py-2"}>
@@ -63,12 +65,21 @@ function TopCard({title, description, data, buttonDetails = {text: "Ver detalles
             </div>
             <hr />
             <div className={"h-fit"}>
+
                 {
-                    data?.map((cardData) => {
-                        return (
-                            <DetailCard key={cardData._id} data={cardData} fieldsMap={fieldsMap} />
-                        )
-                    })
+                    loading ?
+                        [0,1,2,3,4].map((l) => {
+                            return (
+                                <DetailCard key={l} data={{}} fieldsMap={fieldsMap} />
+                            )
+                        })
+                        :
+
+                        data?.map((cardData) => {
+                            return (
+                                <DetailCard key={cardData._id} data={cardData} fieldsMap={fieldsMap} />
+                            )
+                        })
 
                 }
 
