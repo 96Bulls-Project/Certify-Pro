@@ -302,6 +302,10 @@ button:disabled {
 	flex-direction : row;
 }
 
+.menu-item.active {
+	color: var(--primary-color);
+}
+
 #menu.active p {
 	animation-name            : fade-in;
 	animation-duration        : 0.4s;
@@ -382,6 +386,14 @@ button:disabled {
 	overflow      : hidden;
 	white-space   : nowrap;
 }
+
+/* ----- Loading */
+.loading p {
+	color : var(--gray-5) !important;
+	background-color : var(--gray-5) !important;
+	width: fit-content;
+}
+
 
 /* ----- hover */
 input:hover {

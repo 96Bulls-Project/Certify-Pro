@@ -7,6 +7,7 @@ import {faker} from "@faker-js/faker";
 import SummaryCard from "@/components/SummaryCard/SummaryCard";
 import TopCard from "@/components/TopCard/TopCard";
 import axios from "axios";
+import Loading from "@/components/Loading/Loading";
 
 export default function Home() {
     const {data: session, status} = useSession({
@@ -25,12 +26,10 @@ export default function Home() {
     useEffect(() => {
         const getTop5Employees = async () => {
             const response = await axios.get('https://certifyprogdl.azurewebsites.net/getTop5Employees');
-            console.log(response.data)
             setTop5Employees(response.data);
         }
         const getTop5Certificates = async () => {
-            const response = await axios.get('https://certifyprogdl.azurewebsites.net/getTop5Certifications');
-            console.log(response.data)
+            const response = await axios.get('https://certifyprogdl.azurewebsites.net/getTop5Certifications')
             setTop5Certificates(response.data);
         }
         getTop5Employees().then(() => getTop5Certificates().then(() => setIsFetchingData(false)));
@@ -38,7 +37,7 @@ export default function Home() {
 
 
     if (status === 'loading') {
-        return <p>Loading...</p>
+        return <Loading />
     }
 
     const cardsTest = [
@@ -87,7 +86,6 @@ export default function Home() {
     ]
 
     if (session?.user) {
-
         return (
             <Layout user={session?.user}>
                 <PageTitle>Bienvenid@ {session.user.name}</PageTitle>
@@ -97,16 +95,24 @@ export default function Home() {
                     ))}
                 </InfiniteScroll>
                 <div className="grid grid-cols-2 gap-8 c-full row-start-3">
-                    <TopCard data={top5Eployees} fieldsMap={{
-                        "title": "UserId",
-                        "subtitle": "WorkLocation",
-                        "value": "TotalCertifications"
-                    }} loading={isFetchingData} />
-                    <TopCard data={top5Certificates} fieldsMap={{
-                        "title": "Name",
-                        "subtitle": "Skills",
-                        "value": "Type"
-                    }} loading={isFetchingData} />
+                    <TopCard title={"Top 5 Empleados"}
+                             description={"Aquí se muestran los primero 5 empleados que cumplan con los criterios definidos en el filtro"}
+                             data={top5Eployees}
+                             fieldsMap={{
+                                 "title": "UserId",
+                                 "subtitle": "WorkLocation",
+                                 "value": "TotalCertifications"
+                             }}
+                             loading={isFetchingData} />
+                    <TopCard title={"Top 5 Certificados"}
+                             description={"Aquí se muestran las primera 5 certificaciones que cumplen con los criterios definidos en el filtro"}
+                             data={top5Certificates}
+                             fieldsMap={{
+                                 "title": "Name",
+                                 "subtitle": "Skills",
+                                 "value": "Type"
+                             }}
+                             loading={isFetchingData} />
                 </div>
             </Layout>
         )

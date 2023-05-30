@@ -1,5 +1,7 @@
 import React from 'react';
 import {signOut} from "next-auth/react";
+import {useRouter} from "next/router";
+import Link from "next/link";
 
 function Menu({user}) {
     const [active, setActive] = React.useState(false);
@@ -26,6 +28,8 @@ function Menu({user}) {
         }
     ]
 
+    const router = useRouter();
+
     return (
         <div id="menu" className={"flex flex-col justify-between" + (active ? " active " : "")}>
             <div>
@@ -38,10 +42,10 @@ function Menu({user}) {
                 <ul id="menu-items" className="bottom-0 mt-36">
                     {menuItems.map((item, index) => (
                         <li key={index}>
-                            <a className="menu-item" href={item.destination}>
-                                <img src={`/icons/${item.icon}.png`} alt={item.icon} />
+                            <Link className={item.destination === router.pathname ? "menu-item active" : "menu-item"} href={item.destination}>
+                                <img src={item.destination === router.pathname ? `/icons/${item.icon}_active.png` : `/icons/${item.icon}.png`} alt={item.icon} />
                                 {active && <p className="menu-item-title">{item.title}</p>}
-                            </a>
+                            </Link>
                         </li>
                     ))}
                 </ul>
@@ -51,7 +55,7 @@ function Menu({user}) {
                         <div className="">
                             <div className="flex flex-row">
                                 <img src="/icons/user_circle.png" alt="user" />
-                                <p className="text-sm">{user.email}</p>
+                                <p className="text-sm">{user?.email}</p>
                             </div>
                             <p className="text-right text-red-600" onClick={() => signOut()}>Log Out</p>
                         </div>

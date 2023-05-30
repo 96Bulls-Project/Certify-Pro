@@ -47,17 +47,14 @@ function TopCard({title, description, data, buttonDetails = {text: "Ver detalles
     return (
         <div className="card ">
             <div className="p-5">
-                {loading ? <p>Cargando...</p> :
-                    <div>
-
-                        <p className={"font-bold text-gray-700"}>
-                            Title
-                        </p>
-                        <p className={"text-sm text-gray-500"}>
-                            this is the subtitle
-                        </p>
-                    </div>}
-
+                <div>
+                    <p className={"font-bold text-gray-700"}>
+                        {title}
+                    </p>
+                    <p className={"text-sm text-gray-500"}>
+                        {description}
+                    </p>
+                </div>
             </div>
             <hr />
             <div className={"px-5 py-2"}>
@@ -65,12 +62,13 @@ function TopCard({title, description, data, buttonDetails = {text: "Ver detalles
             </div>
             <hr />
             <div className={"h-fit"}>
-
                 {
                     loading ?
-                        [0,1,2,3,4].map((l) => {
+                        [0, 1, 2, 3, 4].map((l) => {
                             return (
-                                <DetailCard key={l} data={{}} fieldsMap={fieldsMap} />
+                                <div className={loading ? "loading" : ""}>
+                                    <DetailCard key={l} data={{}} fieldsMap={fieldsMap} />
+                                </div>
                             )
                         })
                         :

@@ -1,6 +1,7 @@
 import PageTitle from "@/components/PageTitle";
 import {signIn, useSession} from "next-auth/react";
 import Layout from "@/components/Layout";
+import Loading from "@/components/Loading/Loading";
 
 export default function Certificates() {
     const {data: session, status} = useSession({
@@ -14,7 +15,7 @@ export default function Certificates() {
     });
 
     if (status === 'loading') {
-        return <p>Loading...</p>
+        return <Loading />
     }
 
     if (session?.user) {
