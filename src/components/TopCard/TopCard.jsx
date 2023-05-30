@@ -45,7 +45,7 @@ const usersTestData = [
 
 function TopCard({title, description, data, buttonDetails = {text: "Ver detalles", link: "/"}, fieldsMap, loading}) {
     return (
-        <div className="card ">
+        <div className="card h-fit">
             <div className="p-5">
                 <div>
                     <p className={"font-bold text-gray-700"}>
