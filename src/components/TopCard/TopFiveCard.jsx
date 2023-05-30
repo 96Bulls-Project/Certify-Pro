@@ -1,5 +1,6 @@
 import React from 'react';
 import DetailCard from "@/components/DetailCard/DetailCard";
+import Card from "@/components/Card/Card";
 
 const usersTestData = [
     {
@@ -43,20 +44,9 @@ const usersTestData = [
     },
 ]
 
-function TopCard({title, description, data, buttonDetails = {text: "Ver detalles", link: "/"}, fieldsMap, loading}) {
+function TopFiveCard({title, description, data, buttonDetails = {text: "Ver detalles", link: "/"}, fieldsMap, loading}) {
     return (
-        <div className="card h-fit">
-            <div className="p-5">
-                <div>
-                    <p className={"font-bold text-gray-700"}>
-                        {title}
-                    </p>
-                    <p className={"text-sm text-gray-500"}>
-                        {description}
-                    </p>
-                </div>
-            </div>
-            <hr />
+        <Card title={title} subtitle={description}>
             <div className={"px-5 py-2"}>
                 Filtro
             </div>
@@ -86,9 +76,9 @@ function TopCard({title, description, data, buttonDetails = {text: "Ver detalles
                 {buttonDetails.text}
             </button>
 
-        </div>
+        </Card>
     )
         ;
 }
 
-export default TopCard;
+export default TopFiveCard;

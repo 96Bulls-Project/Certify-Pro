@@ -5,7 +5,7 @@ import PageTitle from "../components/PageTitle";
 import InfiniteScroll from "@/components/InfiniteScroll";
 import {faker} from "@faker-js/faker";
 import SummaryCard from "@/components/SummaryCard/SummaryCard";
-import TopCard from "@/components/TopCard/TopCard";
+import TopFiveCard from "@/components/TopCard/TopFiveCard";
 import axios from "axios";
 import Loading from "@/components/Loading/Loading";
 
@@ -95,24 +95,24 @@ export default function Home() {
                     ))}
                 </InfiniteScroll>
                 <div className="grid grid-cols-2 gap-8 c-full row-start-3">
-                    <TopCard title={"Top 5 Empleados"}
-                             description={"Aquí se muestran los primero 5 empleados que cumplan con los criterios definidos en el filtro"}
-                             data={top5Eployees}
-                             fieldsMap={{
+                    <TopFiveCard title={"Top 5 Empleados"}
+                                 description={"Aquí se muestran los primero 5 empleados que cumplan con los criterios definidos en el filtro"}
+                                 data={top5Eployees}
+                                 fieldsMap={{
                                  "title": "UserId",
                                  "subtitle": "WorkLocation",
                                  "value": "TotalCertifications"
                              }}
-                             loading={isFetchingData} />
-                    <TopCard title={"Top 5 Certificados"}
-                             description={"Aquí se muestran las primera 5 certificaciones que cumplen con los criterios definidos en el filtro"}
-                             data={top5Certificates}
-                             fieldsMap={{
+                                 loading={isFetchingData} />
+                    <TopFiveCard title={"Top 5 Certificados"}
+                                 description={"Aquí se muestran las primera 5 certificaciones que cumplen con los criterios definidos en el filtro"}
+                                 data={top5Certificates}
+                                 fieldsMap={{
                                  "title": "Name",
                                  "subtitle": "Skills",
                                  "value": "Type"
                              }}
-                             loading={isFetchingData} />
+                                 loading={isFetchingData} />
                 </div>
             </Layout>
         )
