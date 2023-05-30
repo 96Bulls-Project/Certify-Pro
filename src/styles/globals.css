@@ -233,6 +233,7 @@ button:disabled {
 
 /* ------- Menu */
 #menu {
+	overflow : hidden;
 	left             : 0;
 	top              : 0;
 	height           : 100%;
@@ -275,25 +276,23 @@ button:disabled {
 
 #menu-bottom {
 	height          : 60px;
+	width           : fit-content;
 	border-top      : solid 1px var(--gray-5);
 	display         : flex;
 	flex-direction  : column;
 	justify-content : flex-end;
+	left            : 0;
 }
 
-#menu.active #menu-items {
-	margin-left : 0;
-}
-
-#menu.active #menu-items img {
+#menu #menu-items img {
 	margin-left  : 0;
-	margin-right : 15px;
+	margin-right : 18px;
 	transition   : all 0.4s ease-in-out;
 }
 
-#menu.active #menu-bottom img {
-	margin-left  : 0;
-	margin-right : 15px;
+#menu #menu-bottom img {
+	margin-left: 10px;
+	margin-right: 18px;
 	transition   : all 0.4s ease-in-out;
 }
 
@@ -303,16 +302,7 @@ button:disabled {
 }
 
 .menu-item.active {
-	color: var(--primary-color);
-}
-
-#menu.active p {
-	animation-name            : fade-in;
-	animation-duration        : 0.4s;
-	animation-timing-function : ease-in-out;
-	animation-delay           : 0s;
-	animation-iteration-count : 1;
-	animation-fill-mode       : forwards;
+	color : var(--primary-color);
 }
 
 /* ------- Header */
@@ -389,11 +379,10 @@ button:disabled {
 
 /* ----- Loading */
 .loading p {
-	color : var(--gray-5) !important;
+	color            : var(--gray-5) !important;
 	background-color : var(--gray-5) !important;
-	width: fit-content;
+	width            : fit-content;
 }
-
 
 /* ----- hover */
 input:hover {

@@ -2,9 +2,6 @@ import React from 'react';
 
 function DetailCard({data, fieldsMap}) {
 
-    console.log("Data:", data);
-    console.log("FieldsMap:", fieldsMap);
-
     const renderSubtitle = () => {
         if (Array.isArray(data[fieldsMap.subtitle])) {
             return (

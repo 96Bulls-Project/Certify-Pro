@@ -1,10 +1,11 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {signOut} from "next-auth/react";
 import {useRouter} from "next/router";
 import Link from "next/link";
+import {AppContext} from "@/context/AppProvider";
 
 function Menu({user}) {
-    const [active, setActive] = React.useState(false);
+    const [active, setActive] = useContext(AppContext)
     const menuItems = [
         {
             icon: 'home_alt_fill',
@@ -42,27 +43,24 @@ function Menu({user}) {
                 <ul id="menu-items" className="bottom-0 mt-36">
                     {menuItems.map((item, index) => (
                         <li key={index}>
-                            <Link className={item.destination === router.pathname ? "menu-item active" : "menu-item"} href={item.destination}>
-                                <img src={item.destination === router.pathname ? `/icons/${item.icon}_active.png` : `/icons/${item.icon}.png`} alt={item.icon} />
-                                {active && <p className="menu-item-title">{item.title}</p>}
+                            <Link className={item.destination === router.pathname ? "menu-item active" : "menu-item"}
+                                  href={item.destination}>
+                                <img src={item.destination === router.pathname ? `/icons/${item.icon}_active.png` : `/icons/${item.icon}.png`}
+                                     alt={item.icon} />
+                                {<p className="menu-item-title">{item.title}</p>}
                             </Link>
                         </li>
                     ))}
                 </ul>
             </div>
             <div id="menu-bottom">
-                {active ? (
-                        <div className="">
-                            <div className="flex flex-row">
-                                <img src="/icons/user_circle.png" alt="user" />
-                                <p className="text-sm">{user?.email}</p>
-                            </div>
-                            <p className="text-right text-red-600" onClick={() => signOut()}>Log Out</p>
-                        </div>
-
-                    ) :
-                    <img src="/icons/user_circle.png" alt="user" />
-                }
+                <div className="">
+                    <div className="flex flex-row">
+                        <img src="/icons/user_circle.png" alt="user" />
+                        <p className="text-sm">{user?.email}</p>
+                    </div>
+                    <p className="text-right text-red-600" onClick={() => signOut()}>Log Out</p>
+                </div>
             </div>
         </div>
     );
