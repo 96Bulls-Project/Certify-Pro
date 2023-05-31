@@ -46,7 +46,7 @@ const usersTestData = [
 
 function TopFiveCard({title, description, data, buttonDetails = {text: "Ver detalles", link: "/"}, fieldsMap, loading}) {
     return (
-        <Card title={title} subtitle={description}>
+        <Card title={title} subtitle={description} className={"h-fit"}>
             <div className={"px-5 py-2"}>
                 Filtro
             </div>

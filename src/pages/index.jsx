@@ -8,8 +8,11 @@ import SummaryCard from "@/components/SummaryCard/SummaryCard";
 import TopFiveCard from "@/components/TopCard/TopFiveCard";
 import axios from "axios";
 import Loading from "@/components/Loading/Loading";
+import useSWR from "swr";
 
 export default function Home() {
+    const [isFetchingData, setIsFetchingData] = useState(true);
+
     const {data: session, status} = useSession({
         required: true,
         onUnauthenticated() {
@@ -19,22 +22,22 @@ export default function Home() {
             });
         }
     });
-    const [isFetchingData, setIsFetchingData] = useState(true);
-    const [top5Eployees, setTop5Employees] = useState([]);
-    const [top5Certificates, setTop5Certificates] = useState([]);
+
+    const fetcher = (url) => axios(url).then((res) => {
+        console.log(res)
+        return res.data.data;
+    });
+
+    const {data: top5Employees, error: top5EmployeesError, top5EmployeesIsLoading} = useSWR('api/top5Employees', fetcher);
+    const {data: top5Certificates, error: top5CertificatesError, top5CertificatesIsLoading} = useSWR('api/top5Certificates', fetcher);
 
     useEffect(() => {
-        const getTop5Employees = async () => {
-            const response = await axios.get('https://certifyprogdl.azurewebsites.net/getTop5Employees');
-            setTop5Employees(response.data);
+        if (top5EmployeesIsLoading || top5CertificatesIsLoading) {
+            setIsFetchingData(true);
+        } else {
+            setIsFetchingData(false);
         }
-        const getTop5Certificates = async () => {
-            const response = await axios.get('https://certifyprogdl.azurewebsites.net/getTop5Certifications')
-            setTop5Certificates(response.data);
-        }
-        getTop5Employees().then(() => getTop5Certificates().then(() => setIsFetchingData(false)));
-    }, []);
-
+    }, [top5EmployeesIsLoading, top5CertificatesIsLoading])
 
     if (status === 'loading') {
         return <Loading />
@@ -97,7 +100,7 @@ export default function Home() {
                 <div className="grid grid-cols-2 gap-8 c-full row-start-3">
                     <TopFiveCard title={"Top 5 Empleados"}
                                  description={"Aquí se muestran los primero 5 empleados que cumplan con los criterios definidos en el filtro"}
-                                 data={top5Eployees}
+                                 data={top5Employees}
                                  fieldsMap={{
                                  "title": "UserId",
                                  "subtitle": "WorkLocation",
