@@ -23,7 +23,8 @@ export default function Dashboard() {
     for (let i = 0; i < 5; i++) {
         topData_Test.push({
             name: faker.person.fullName(),
-            value: faker.number.int({min: 0, max: 100})
+            value: faker.number.int({min: 0, max: 100}),
+            role: faker.person.jobTitle()
         })
     }
 
@@ -56,15 +57,20 @@ export default function Dashboard() {
                 <PageTitle>Dashboard</PageTitle>
                 <div className="c-full">
                     <Card title={"Empleados destacados"}
-                          subtitle={"Aquí se mostrarán los empleados que han tenido mejor desempeño."} className={"h-full"}>
-                        <div className="flex gap-10 w-fit overflow-x-scroll">
+                          subtitle={"Aquí se mostrarán los empleados que han tenido mejor desempeño."}
+                          className={"h-full "}>
+                        <div className="flex gap-10 w-fit overflow-x-scroll items-center h-32">
                             {
-
                                 topData_Test?.map((item, index) => {
                                     return (
-                                        <div key={index} className="flex justify-between items-center h-full w-96">
-                                            <p>{item.name}</p>
-                                            <p>{item.value}</p>
+                                        <div key={index} className="flex justify-between items-center h-full w-96 p-5">
+                                            <div>
+                                                <p>{item.name}</p>
+                                                <p>{item.role}</p>
+                                            </div>
+                                            <div>
+                                                <p>{item.value}</p>
+                                            </div>
                                         </div>
                                     )
                                 })
