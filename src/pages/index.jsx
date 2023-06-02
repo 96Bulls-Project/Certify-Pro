@@ -32,6 +32,8 @@ export default function Home() {
     const {data: top5Certificates, error: top5CertificatesError, top5CertificatesIsLoading} = useSWR('api/top5Certificates', fetcher);
 
     useEffect(() => {
+
+
         if (top5EmployeesIsLoading || top5CertificatesIsLoading) {
             setIsFetchingData(true);
         } else {
