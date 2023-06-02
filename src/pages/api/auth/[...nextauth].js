@@ -55,7 +55,7 @@ export const authOptions = {
         jwt: true,
     },
     jwt: {
-        secret: process.env.NEXT_PUBLIC_JWT_SECRET,
+        secret: process.env.JWT_SECRET,
     },
     pages: {
         signIn: '/login',
