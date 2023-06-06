@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import TopCard from "@/components/TopCard/TopCard";
 import { Line } from "react-chartjs-2";
 import { CategoryScale, Chart as ChartJS, Filler, LinearScale, LineElement, PointElement, Title } from "chart.js";
+import { employees1, employees2 } from "@/lib/mockData";
 
 
 ChartJS.register(
@@ -28,8 +29,12 @@ export default function Employees() {
         }
     });
 
+    const itemsPerPage = 5;
+
     const [isFetchingData, setIsFetchingData] = useState(true);
-    const [top5Teams, setTop5Teams] = useState([]);
+    const [topTeams, settopTeams] = useState([]);
+    const [employees, setEmployees] = useState({});
+    const [employeesItemsPages, setEmployeesItemsPages] = useState([]);
 
     const options = {
         responsive: true,
@@ -92,12 +97,33 @@ export default function Employees() {
         ],
     };
 
-    useEffect(() => {
-        const getTop5Teams = async () => {
-            // const response = await axios.get('https://certifyprogdl.azurewebsites.net/getTop5Teams');
-            // setTop5Teams(response.data);
+    const handlePagination = (page => {
+        // Query the api to get the requested page...
+        switch (page) {
+            case 1:
+                setEmployees(employees1);
+                setEmployeesItemsPages([...Array(Math.ceil(employees1.total / itemsPerPage)).keys()]);
+                break;
 
-            setTop5Teams([
+            case 2:
+                setEmployees(employees2);
+                setEmployeesItemsPages([...Array(Math.ceil(employees2.total / itemsPerPage)).keys()]);
+                break;
+
+            default:
+                setEmployees(employees1);
+                setEmployeesItemsPages([...Array(Math.ceil(employees1.total / itemsPerPage)).keys()]);
+                break;
+        }
+
+    });
+
+    useEffect(() => {
+        const gettopTeams = async () => {
+            // const response = await axios.get('https://certifyprogdl.azurewebsites.net/gettopTeams');
+            // settopTeams(response.data);
+
+            settopTeams([
                 {
                     "id": 1,
                     "name": "Omega Team",
@@ -123,10 +149,14 @@ export default function Employees() {
                     "date": "Jan 14, 2023"
                 }
             ]);
+
+
+            setEmployees(employees1);
+            setEmployeesItemsPages([...Array(Math.ceil(employees1.total / itemsPerPage)).keys()]);
         }
 
 
-        getTop5Teams().then(() => setIsFetchingData(false));
+        gettopTeams().then(() => setIsFetchingData(false));
     }, []);
 
     if (status === 'loading') {
@@ -180,7 +210,7 @@ export default function Employees() {
 
                         <div className="">
 
-                            {top5Teams.map(team => (
+                            {topTeams.map(team => (
                                 <div className="flex items-center justify-between" key={team.id}>
                                     <div className="flex items-center m-4">
                                         <div className="rounded-full w-10 h-10 bg-slate-600">
@@ -242,23 +272,74 @@ export default function Employees() {
                         <table className="table-auto w-full text-left">
                             <thead>
                                 <tr>
-                                    <th className={"text-sm text-gray-500 font-light w-8/12"}>Group</th>
-                                    <th className={"text-sm text-gray-500 font-light"}>Status</th>
+                                    <th className={""}></th>
+                                    {/* <th className={"text-sm text-gray-500 font-light w-8/12"}>Group</th> */}
+                                    <th className={"text-sm text-gray-500 font-light"}>Name</th>
                                     <th className={"text-sm text-gray-500 font-light"}>Role</th>
+                                    <th className={"text-sm text-gray-500 font-light"}>Certificaciones</th>
+                                    <th className={"text-sm text-gray-500 font-light"}>Ubicación</th>
+                                    <th className={"text-sm text-gray-500 font-light"}>Info</th>
                                 </tr>
                             </thead>
 
                             <tbody>
 
-                                <tr>
+
+                                {employees.data.map(emp => (
+
+                                    <tr className="my-4" key={emp.id}>
+                                        <td>
+                                            <div className="flex justify-center">
+                                                <div className="rounded-full w-10 h-10 bg-slate-600"></div>
+                                            </div>
+                                            {emp.icon}
+                                        </td>
+
+                                        <td>
+                                            {emp.name}
+                                        </td>
+
+                                        <td className="text-gray-500">
+                                            {emp.role}
+                                        </td>
+
+                                        <td className="text-gray-500">
+                                            {emp.numCertifications}
+                                        </td>
+
+                                        <td className="text-gray-500">
+                                            {emp.location}
+                                        </td>
+
+                                        <td className="m-4">
+                                            <button className="bg-blue-600 text-white px-2 py-1 rounded">Ver mas</button>
+                                        </td>
+                                    </tr>
+                                ))}
+                                {/* <td></td>
                                     <td>Juan Escutia</td>
+                                    <td>Employer</td>
+                                    <td>5</td>
+                                    <td>Zap, Jalisco</td>
                                     <td>
                                         <button className="bg-blue-600 text-white px-2 py-1 rounded">Ver mas</button>
-                                    </td>
-                                    <td>Employer</td>
-                                </tr>
+                                    </td> */}
+
+
                             </tbody>
                         </table>
+
+                        <hr />
+
+                        <div className="p-5 text-center">
+                            {employeesItemsPages.map(pageNum => (
+                                <button className={`text-${pageNum + 1 === employees.page ? "blue" : "slate"}-600 px-2 py-1 rounded mx-2`} key={pageNum + 1} onClick={() => handlePagination(pageNum + 1)}>
+                                    {pageNum + 1}
+                                </button>
+                            ))}
+
+                        </div>
+
                     </div>
                 </div>
             </Layout>
