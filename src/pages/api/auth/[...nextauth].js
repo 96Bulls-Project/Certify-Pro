@@ -55,8 +55,7 @@ export const authOptions = {
         jwt: true,
     },
     jwt: {
-        // TODO: Replace with a secure secret in ENVIRONMENT VARIABLES
-        secret: 'SECRET_REPLACE_ME'
+        secret: process.env.JWT_SECRET,
     },
     pages: {
         signIn: '/login',
