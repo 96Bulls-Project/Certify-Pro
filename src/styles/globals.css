@@ -255,6 +255,11 @@ button:disabled {
 	grid-template-rows    : 1fr 1.5fr 6fr;
 	column-gap            : 25px;
 	row-gap               : 25px;
+	overflow: scroll;
+}
+
+#main-wrapper::-webkit-scrollbar {
+	display: none;
 }
 
 /* ------- Menu */

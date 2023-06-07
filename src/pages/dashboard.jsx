@@ -7,12 +7,13 @@ import {faker} from "@faker-js/faker";
 import Image from "next/image";
 import {Doughnut} from "react-chartjs-2";
 import {ArcElement, Chart as ChartJS, Legend, Tooltip} from "chart.js";
-
+import useSWR from "swr";
+import axios from "axios";
+import {useEffect, useState} from "react";
 
 
 export default function Dashboard() {
-    ChartJS.register(ArcElement, Tooltip, Legend);
-
+    // Check if user is authenticated
     const {data: session, status} = useSession({
         required: true,
         onUnauthenticated() {
@@ -23,25 +24,29 @@ export default function Dashboard() {
         }
     });
 
-    const doughnutData = {
-        labels: [
-            'Red',
-            'Blue',
-            'Yellow'
-        ],
-        datasets: [{
-            label: 'My First Dataset',
-            data: [300, 250, 100],
-            backgroundColor: [
-                'rgb(255, 99, 132)',
-                'rgb(54, 162, 235)',
-                'rgb(255, 205, 86)'
-            ],
-            hoverOffset: 4
-        }]
-    };
+    ChartJS.register(ArcElement, Tooltip);
+
+    const [isFetchingData, setIsFetchingData] = useState(true);
 
 
+    const fetcher = (url) => axios(url).then((res) => {
+        console.log(res)
+        return res.data.data;
+    });
+
+    const {
+        data: top5Certificates,
+        error: top5CertificatesError,
+        top5CertificatesIsLoading
+    } = useSWR('api/top5Certificates', fetcher);
+
+    useEffect(() => {
+        if (top5CertificatesIsLoading) {
+            setIsFetchingData(true);
+        } else {
+            setIsFetchingData(false);
+        }
+    }, [top5CertificatesIsLoading])
 
     const topData_Test = []
 
@@ -59,22 +64,32 @@ export default function Dashboard() {
         return <Loading />
     }
 
-    const data = {
-        labels: [
-            'Red',
-            'Blue',
-            'Yellow'
-        ],
+    const doughnutData = {
+        labels: top5Certificates?.map(cert => cert.Name),
         datasets: [{
             label: 'My First Dataset',
-            data: [300, 50, 100],
+            data: top5Certificates?.map(cert => cert.CertifiedEmployees.length),
             backgroundColor: [
-                'rgb(255, 99, 132)',
-                'rgb(54, 162, 235)',
-                'rgb(255, 205, 86)'
+                '#48A0F8',
+                '#3374B5',
+                '#3A629E',
+                '#2B4B78',
+                '#12335F',
+                '#0A234F'
             ],
             hoverOffset: 4
         }]
+    };
+
+    const options = {
+        plugins: {
+            legend: {
+                display: true,
+            }
+        },
+        interaction: {
+            intersect: true,
+        },
     };
 
     if (session?.user) {
@@ -93,7 +108,10 @@ export default function Dashboard() {
                                             <div key={index}
                                                  className="flex justify-between items-center h-full w-80 p-5">
                                                 <div className="flex items-center">
-                                                    <Image src={"/icons/employees_summary_card.png"} width={40} height={40} className={"mr-2"} />
+                                                    <Image src={"/icons/employees_summary_card.png"}
+                                                           width={40}
+                                                           height={40}
+                                                           className={"mr-2"} />
                                                     <div className={'w-3/4'}>
                                                         <p className={'font-semibold'}>{item.name}</p>
                                                         <p className={'text-gray-500 text-sm'}>{item.role}</p>
@@ -112,8 +130,29 @@ export default function Dashboard() {
                 </div>
                 <div className="c-full grid-c-2-4 ">
                     <Card title={"Tipos de certificados"}
-                          subtitle={"Aquí se mostrará el porcentaje de empleados que han tomado los diferentes tipos de certificaciones."}>
-                        <Doughnut data={doughnutData} />
+                          subtitle={"Aquí se mostrará el porcentaje de empleados que han tomado los diferentes tipos de certificaciones."}
+                          footerTitle={"La certificacion más tomada es"}
+                          footerSubtitle={top5Certificates?.length > 0 ? top5Certificates[0].Name : ""}>
+                        <div className={"w-5/6 m-auto my-5"}>
+                            <Doughnut width={10} data={doughnutData} options={options} />
+                        </div>
+                        <div className="w-5/6 m-auto">
+                            <h4>Top 3</h4>
+                            <ul className="pb-2">
+                                {top5Certificates?.slice(0, 3)
+                                    ?.map((cert, index) => {
+                                        return (
+                                            <li key={index}>
+                                                <div className="flex text-gray-500 border-b-2 border-b-gray-300 mb-3 ">
+                                                    <p className="mr-5">{index + 1}.</p>
+                                                    <p>{cert.Name}</p>
+                                                </div>
+                                            </li>
+                                        )
+                                    })
+                                }
+                            </ul>
+                        </div>
 
                     </Card>
                     <Card title={"Progreso de nuevas certificaciones al año"}

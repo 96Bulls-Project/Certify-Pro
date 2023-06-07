@@ -3,7 +3,6 @@ import { signIn, useSession } from "next-auth/react";
 import Layout from "@/components/Layout";
 import Loading from "@/components/Loading/Loading";
 import { useState, useEffect } from "react";
-import TopCard from "@/components/TopCard/TopCard";
 import { Line } from "react-chartjs-2";
 import { CategoryScale, Chart as ChartJS, Filler, LinearScale, LineElement, PointElement, Title } from "chart.js";
 import { employees1, employees2 } from "@/lib/mockData";
@@ -210,7 +209,7 @@ export default function Employees() {
 
                         <div className="">
 
-                            {topTeams.map(team => (
+                            {topTeams?.map(team => (
                                 <div className="flex items-center justify-between" key={team.id}>
                                     <div className="flex items-center m-4">
                                         <div className="rounded-full w-10 h-10 bg-slate-600">
@@ -285,7 +284,7 @@ export default function Employees() {
                             <tbody>
 
 
-                                {employees.data.map(emp => (
+                                {employees.data?.map(emp => (
 
                                     <tr className="my-4" key={emp.id}>
                                         <td>
