@@ -1,11 +1,12 @@
 import PageTitle from "@/components/PageTitle";
-import { signIn, useSession } from "next-auth/react";
+import {signIn, useSession} from "next-auth/react";
 import Layout from "@/components/Layout";
 import Loading from "@/components/Loading/Loading";
-import { useState, useEffect } from "react";
-import { Line } from "react-chartjs-2";
-import { CategoryScale, Chart as ChartJS, Filler, LinearScale, LineElement, PointElement, Title } from "chart.js";
-import { employees1, employees2 } from "@/lib/mockData";
+import {useState, useEffect} from "react";
+import {Line} from "react-chartjs-2";
+import {CategoryScale, Chart as ChartJS, Filler, LinearScale, LineElement, PointElement, Title} from "chart.js";
+import {employees1, employees2} from "@/lib/mockData";
+import Card from "@/components/Card/Card";
 
 
 ChartJS.register(
@@ -18,7 +19,7 @@ ChartJS.register(
 );
 
 export default function Employees() {
-    const { data: session, status } = useSession({
+    const {data: session, status} = useSession({
         required: true,
         onUnauthenticated() {
             signIn().then(r => {
@@ -37,7 +38,6 @@ export default function Employees() {
 
     const options = {
         responsive: true,
-        maintainAspectRatio: false,
         title: {
             display: false,
         },
@@ -164,54 +164,27 @@ export default function Employees() {
 
     if (session?.user) {
         return (
-            <Layout user={session?.user}>
+            <Layout user={session?.user} grid={"grid-r-1-1-4"}>
                 <PageTitle>Empleados</PageTitle>
 
-                <div className="grid grid-cols-3 gap-8 c-full row-start-2">
+                <div className="c-full grid-c-4-2 ">
 
-                    <div className="h-auto card col-span-2">
-                        <div className="p-5">
-                            <div>
-                                <p className={"font-bold text-gray-700"}>
-                                    Rendimiento de empleados
-                                </p>
-                                <p className={"text-sm text-gray-500"}>
-                                    Aquí se visualiza el rendimiento general de los empleados.
-                                </p>
-                            </div>
+                    <Card className="h-full"
+                          title={"Rendimiento de empleados"}
+                          subtitle={"Aquí se visualiza el rendimiento general de los empleados."}
+                    >
+                        <div className={"h-full w-full pt-8"}>
+                            <Line options={options} data={data} width={400} height={"160px"} />
                         </div>
-                        <hr />
+                    </Card>
 
-                        <div className="h-400">
-                            <Line options={options} data={data} width={"100%"} height={"340px"} />
-                        </div>
-
-                        <hr />
-
-                        <div className="flex flex-row-reverse m-4">
-                            <a href="#" className="text-gray-500">Expander &gt;</a>
-                        </div>
-
-                    </div>
-
-                    <div className="card h-auto">
-                        <div className="p-5">
-                            <div>
-                                <p className={"font-bold text-gray-700"}>
-                                    Equipos destacados
-                                </p>
-                                <p className={"text-sm text-gray-500"}>
-                                    Aquí se muestran los equipos con mayor cantidad de certificados así como de puntajes.
-                                </p>
-                            </div>
-                        </div>
-                        <hr />
-
+                    <Card className="h-full"
+                          title={"Equipos destacados"}
+                          subtitle={"Aquí se muestran los equipos con mayor cantidad de certificados así como de puntajes."}>
                         <div className="">
-
                             {topTeams?.map(team => (
                                 <div className="flex items-center justify-between" key={team.id}>
-                                    <div className="flex items-center m-4">
+                                    <div className="flex items-center m-4 mb-1">
                                         <div className="rounded-full w-10 h-10 bg-slate-600">
                                             {team.icon}
                                         </div>
@@ -231,91 +204,62 @@ export default function Employees() {
                                 </div>
                             ))}
                         </div>
-
-                        <hr />
-
-                        <div className="flex flex-row-reverse m-4">
-                            <a href="#" className="text-gray-500">Expander &gt;</a>
-                        </div>
-
-                    </div>
+                    </Card>
 
                 </div>
 
-                <div className="grid grid-cols-1 gap-8 c-full row-start-4 h-auto">
+                <div className="c-full">
 
-                    <div className="h-auto card col-span-2">
-                        <div className="p-5">
-                            <div>
-                                <p className={"font-bold text-gray-700"}>
-                                    Lista de empleados
-                                </p>
-                                <p className={"text-sm text-gray-500"}>
-                                    Aquí se visualiza la lista con todos los empleados, asi como su status y roles.
-                                </p>
-                            </div>
-                        </div>
-                        <hr />
-
-                        {/* <div className="h-400">
-                            <Line options={options} data={data} width={"100%"} height={"340px"} />
-                        </div>
-
-                        <hr />
-
-                        <div className="flex flex-row-reverse m-4">
-                            <a href="#" className="text-gray-500">Expander &gt;</a>
-                        </div> */}
-
-                        {/* Table */}
+                    <Card title={"Lista de empleados"}
+                          subtitle={"Aquí se visualiza la lista con todos los empleados, asi como su status y roles."}>
                         <table className="table-auto w-full text-left">
                             <thead>
-                                <tr>
-                                    <th className={""}></th>
-                                    {/* <th className={"text-sm text-gray-500 font-light w-8/12"}>Group</th> */}
-                                    <th className={"text-sm text-gray-500 font-light"}>Name</th>
-                                    <th className={"text-sm text-gray-500 font-light"}>Role</th>
-                                    <th className={"text-sm text-gray-500 font-light"}>Certificaciones</th>
-                                    <th className={"text-sm text-gray-500 font-light"}>Ubicación</th>
-                                    <th className={"text-sm text-gray-500 font-light"}>Info</th>
-                                </tr>
+                            <tr>
+                                <th className={""}></th>
+                                {/* <th className={"text-sm text-gray-500 font-light w-8/12"}>Group</th> */}
+                                <th className={"text-sm text-gray-500 font-light"}>Name</th>
+                                <th className={"text-sm text-gray-500 font-light"}>Role</th>
+                                <th className={"text-sm text-gray-500 font-light"}>Certificaciones</th>
+                                <th className={"text-sm text-gray-500 font-light"}>Ubicación</th>
+                                <th className={"text-sm text-gray-500 font-light"}>Info</th>
+                            </tr>
                             </thead>
 
                             <tbody>
 
 
-                                {employees.data?.map(emp => (
+                            {employees.data?.map(emp => (
 
-                                    <tr className="my-4" key={emp.id}>
-                                        <td>
-                                            <div className="flex justify-center">
-                                                <div className="rounded-full w-10 h-10 bg-slate-600"></div>
-                                            </div>
-                                            {emp.icon}
-                                        </td>
+                                <tr className="my-4" key={emp.id}>
+                                    <td>
+                                        <div className="flex justify-center">
+                                            <div className="rounded-full w-10 h-10 bg-slate-600"></div>
+                                        </div>
+                                        {emp.icon}
+                                    </td>
 
-                                        <td>
-                                            {emp.name}
-                                        </td>
+                                    <td>
+                                        {emp.name}
+                                    </td>
 
-                                        <td className="text-gray-500">
-                                            {emp.role}
-                                        </td>
+                                    <td className="text-gray-500">
+                                        {emp.role}
+                                    </td>
 
-                                        <td className="text-gray-500">
-                                            {emp.numCertifications}
-                                        </td>
+                                    <td className="text-gray-500">
+                                        {emp.numCertifications}
+                                    </td>
 
-                                        <td className="text-gray-500">
-                                            {emp.location}
-                                        </td>
+                                    <td className="text-gray-500">
+                                        {emp.location}
+                                    </td>
 
-                                        <td className="m-4">
-                                            <button className="bg-blue-600 text-white px-2 py-1 rounded">Ver mas</button>
-                                        </td>
-                                    </tr>
-                                ))}
-                                {/* <td></td>
+                                    <td className="m-4">
+                                        <button className="bg-blue-600 text-white px-2 py-1 rounded">Ver mas</button>
+                                    </td>
+                                </tr>
+                            ))}
+                            {/* <td></td>
                                     <td>Juan Escutia</td>
                                     <td>Employer</td>
                                     <td>5</td>
@@ -332,14 +276,16 @@ export default function Employees() {
 
                         <div className="p-5 text-center">
                             {employeesItemsPages.map(pageNum => (
-                                <button className={`text-${pageNum + 1 === employees.page ? "blue" : "slate"}-600 px-2 py-1 rounded mx-2`} key={pageNum + 1} onClick={() => handlePagination(pageNum + 1)}>
+                                <button className={`text-${pageNum + 1 === employees.page ? "blue" : "slate"}-600 px-2 py-1 rounded mx-2`}
+                                        key={pageNum + 1}
+                                        onClick={() => handlePagination(pageNum + 1)}>
                                     {pageNum + 1}
                                 </button>
                             ))}
 
                         </div>
 
-                    </div>
+                    </Card>
                 </div>
             </Layout>
         )

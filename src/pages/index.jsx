@@ -99,7 +99,7 @@ export default function Home() {
                         <SummaryCard key={index} info={card} type={card.dataOf} loading={isFetchingData} />
                     ))}
                 </InfiniteScroll>
-                <div className="grid grid-cols-2 gap-8 c-full row-start-3">
+                <div className="grid grid-cols-2 gap-8 c-full">
                     <TopFiveCard title={"Top 5 Empleados"}
                                  description={"Aquí se muestran los primero 5 empleados que cumplan con los criterios definidos en el filtro"}
                                  data={top5Employees}
