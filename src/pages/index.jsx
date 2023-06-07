@@ -92,7 +92,7 @@ export default function Home() {
 
     if (session?.user) {
         return (
-            <Layout user={session?.user}>
+            <Layout user={session?.user} grid={'grid-r-1-1-4'}>
                 <PageTitle>Bienvenid@ {session.user.name}</PageTitle>
                 <InfiniteScroll>
                     {cardsTest.map((card, index) => (
