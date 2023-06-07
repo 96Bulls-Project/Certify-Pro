@@ -5,12 +5,22 @@ import Loading from "@/components/Loading/Loading";
 import Card from "@/components/Card/Card";
 import {faker} from "@faker-js/faker";
 import Image from "next/image";
-import {Doughnut} from "react-chartjs-2";
-import {ArcElement, Chart as ChartJS, Legend, Tooltip} from "chart.js";
+import {Bar, Doughnut} from "react-chartjs-2";
+import {ArcElement, BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title, Tooltip} from "chart.js";
 import useSWR from "swr";
 import axios from "axios";
 import {useEffect, useState} from "react";
 
+ChartJS.register(
+    ArcElement,
+    Tooltip,
+    CategoryScale,
+    LinearScale,
+    BarElement,
+    Title,
+    Tooltip,
+    Legend
+);
 
 export default function Dashboard() {
     // Check if user is authenticated
@@ -24,10 +34,7 @@ export default function Dashboard() {
         }
     });
 
-    ChartJS.register(ArcElement, Tooltip);
-
     const [isFetchingData, setIsFetchingData] = useState(true);
-
 
     const fetcher = (url) => axios(url).then((res) => {
         console.log(res)
@@ -82,15 +89,48 @@ export default function Dashboard() {
     };
 
     const options = {
+        responsive: false,
         plugins: {
             legend: {
                 display: true,
+                position: 'right'
             }
         },
         interaction: {
             intersect: true,
         },
     };
+
+
+    const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+
+    const historicalDataGraph = {
+        labels,
+        datasets: [
+            {
+                label: '2021',
+                data: labels.map(() => faker.datatype.number({min: 0, max: 1000})),
+                backgroundColor: '#3274B5',
+            },
+            {
+                label: '2022',
+                data: labels.map(() => faker.datatype.number({min: 0, max: 1000})),
+                backgroundColor: '#48A0F8',
+            },
+        ],
+    };
+
+    const historicalOptionsGraph = {
+        responsive: true,
+        plugins: {
+            legend: {
+                position: 'top',
+            },
+            title: {
+                display: false,
+            },
+        },
+    }
 
     if (session?.user) {
         return (
@@ -133,8 +173,8 @@ export default function Dashboard() {
                           subtitle={"Aquí se mostrará el porcentaje de empleados que han tomado los diferentes tipos de certificaciones."}
                           footerTitle={"La certificacion más tomada es"}
                           footerSubtitle={top5Certificates?.length > 0 ? top5Certificates[0].Name : ""}>
-                        <div className={"w-5/6 m-auto my-5"}>
-                            <Doughnut width={10} data={doughnutData} options={options} />
+                        <div className={"w-5/6 h-fit m-auto my-5"}>
+                            <Doughnut data={doughnutData} options={options} />
                         </div>
                         <div className="w-5/6 m-auto">
                             <h4>Top 3</h4>
@@ -145,7 +185,7 @@ export default function Dashboard() {
                                             <li key={index}>
                                                 <div className="flex text-gray-500 border-b-2 border-b-gray-300 mb-3 ">
                                                     <p className="mr-5">{index + 1}.</p>
-                                                    <p>{cert.Name}</p>
+                                                    <p className={'text-xs'}>{cert.Name}</p>
                                                 </div>
                                             </li>
                                         )
@@ -153,11 +193,12 @@ export default function Dashboard() {
                                 }
                             </ul>
                         </div>
-
                     </Card>
                     <Card title={"Progreso de nuevas certificaciones al año"}
                           subtitle={"Aquí se visualiza el progreso de las certificaciones de cada mes a lo largo del año."}>
-
+                        <div className={'px-5 pt-10'}>
+                            <Bar data={historicalDataGraph} options={historicalOptionsGraph} />
+                        </div>
                     </Card>
                 </div>
             </Layout>
