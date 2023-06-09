@@ -2,48 +2,6 @@ import React from 'react';
 import DetailCard from "@/components/DetailCard/DetailCard";
 import Card from "@/components/Card/Card";
 
-const usersTestData = [
-    {
-        "id": 1,
-        "name": "Leanne Graham",
-        "username": "Bret",
-        "certificates": [
-            {
-                "id": "13513"
-            },
-            {
-                "id": "13514"
-            }
-        ]
-    },
-    {
-        "id": 2,
-        "name": "Ervin Howell",
-        "username": "Antonette",
-        "certificates": [
-            {
-                "id": "13513"
-            },
-        ]
-    },
-    {
-        "id": 3,
-        "name": "Clementine Bauch",
-        "username": "Samantha",
-        "certificates": [
-            {
-                "id": "13513"
-            },
-            {
-                "id": "13512"
-            },
-            {
-                "id": "13511"
-            },
-        ]
-    },
-]
-
 function TopFiveCard({title, description, data, buttonDetails = {text: "Ver detalles", link: "/"}, fieldsMap, loading}) {
     return (
         <Card title={title} subtitle={description} className={"h-fit"}>

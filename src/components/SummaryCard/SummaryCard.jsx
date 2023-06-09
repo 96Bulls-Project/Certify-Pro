@@ -58,7 +58,6 @@ function SummaryCard({info, type='employees'}) {
             },
         }
     };
-
     const data = {
         labels: info.data.map(() => " "),
         datasets: [

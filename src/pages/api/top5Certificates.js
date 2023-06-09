@@ -1,7 +1,5 @@
-import Redis from 'ioredis';
+import redis from "../../../lib/redis";
 import axios from "axios";
-
-let redis = new Redis(process.env.NEXT_PUBLIC_REDIS_URI);
 
 export default async function handler(req, res) {
 
@@ -24,7 +22,7 @@ export default async function handler(req, res) {
                 result.data = response.data;
                 result.type = 'api';
                 result.latency = Date.now() - start;
-                redis.set('top5Cerficates', JSON.stringify(response.data));
+                // redis.set('top5Cerficates', JSON.stringify(response.data));
                 return res.status(200).json(result);
             })
 
