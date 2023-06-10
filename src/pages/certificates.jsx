@@ -3,12 +3,24 @@ import {signIn, useSession} from "next-auth/react";
 import Layout from "@/components/Layout";
 import Loading from "@/components/Loading/Loading";
 import axios from "axios";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {faker} from "@faker-js/faker";
 import Card from "@/components/Card/Card";
 import {Line} from "react-chartjs-2";
 import PaginateItems from "@/components/PaginateItems/PaginateItems";
 import ReactPaginate from "react-paginate";
+import OpenDetailsButton from "@/components/OpenDetailsButton/OpenDetailsButton";
+import {CategoryScale, Chart as ChartJS, Filler, LinearScale, LineElement, PointElement, Title} from "chart.js";
+import useSWR from "swr";
+
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Filler,
+    Title,
+);
 
 export default function Certificates() {
     const {data: session, status} = useSession({
@@ -23,16 +35,9 @@ export default function Certificates() {
 
     const fetcher = (url) => axios(url, {
         method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Server': 'gunicorn'
-        }
     }).then((res) => {
-        console.log(res)
-        const parsedData = JSON.parse(res.data.data);
-        console.log(parsedData);
-        return JSON.parse(res.data.data);
+        console.log(res.data)
+        return res.data.data;
     });
 
     const [isFetchingData, setIsFetchingData] = useState(true);
@@ -66,24 +71,15 @@ export default function Certificates() {
 
         },
     ]);
-    /*const {
-        data: employees,
-        error: employeesError,
-        employeesIsLoading
-    } = useSWR('/api/employees', fetcher);*/
-
-    const employees = [];
-    for (let i = 0; i < 100; i++) {
-        employees.push({
-            id: i,
-            name: faker.person.firstName(),
-            role: faker.person.jobArea(),
-            location: faker.location.city(),
-            numCertifications: faker.number.int(100),
-        })
-    }
+    const {
+        data: certificates,
+        error: certificatesError,
+        certificatesIsLoading
+    } = useSWR('/api/certificates', fetcher);
 
     const [itemOffset, setItemOffset] = useState(0);
+    const [currentItems, setCurrentItems] = useState([]);
+    const [pageCount, setPageCount] = useState(0);
 
     const options = {
         responsive: true,
@@ -134,7 +130,7 @@ export default function Certificates() {
         labels: ["", "", "", ""],
         datasets: [
             {
-                label: "employees",
+                label: "certificates",
                 fill: true,
                 data: [7, 13, 39, 11],
                 borderColor: '#0F62FE',
@@ -145,21 +141,29 @@ export default function Certificates() {
         ],
     };
 
+    const itemsPerPage = 5
+
+    useEffect(() => {
+        if (certificates) {
+            const endOffset = itemOffset + itemsPerPage;
+            console.log(certificates)
+            setPageCount(Math.ceil(certificates?.length / itemsPerPage))
+            setCurrentItems(certificates?.slice(itemOffset, endOffset));
+            setIsFetchingData(false);
+        }
+
+    }, [certificates]);
+
     if (status === 'loading') {
         return <Loading />
     }
-    const itemsPerPage = 5
-
-    const endOffset = itemOffset + itemsPerPage;
-    console.log(`Loading items from ${itemOffset} to ${endOffset}`);
-    const currentItems = employees?.slice(itemOffset, endOffset);
-    const pageCount = Math.ceil(employees?.length / itemsPerPage);
 
     // Invoke when user click to request another page.
     const handlePageClick = (event) => {
-        const newOffset = (event.selected * itemsPerPage) % employees?.length;
+        const newOffset = (event.selected * itemsPerPage) % certificates?.length;
         setItemOffset(newOffset);
     };
+
 
     if (session?.user) {
         return (
@@ -173,7 +177,7 @@ export default function Certificates() {
                           subtitle={"Aquí se visualiza la cantidad total de certificaciones."}
                     >
                         <div className={"h-full w-full pt-8"}>
-                            <Line options={options} data={data} width={400} height={"145px"} />
+                            <Line id="certificates-graph" options={options} data={data} width={400} height={"145px"} />
                         </div>
                     </Card>
 
@@ -197,9 +201,7 @@ export default function Certificates() {
                                         </div>
 
                                     </div>
-                                    <div className="m-4">
-                                        <button className="bg-blue-600 text-white px-2 py-1 rounded">Ver mas</button>
-                                    </div>
+                                    <OpenDetailsButton />
                                 </div>
                             ))}
                         </div>
@@ -216,20 +218,19 @@ export default function Certificates() {
                             <tr>
                                 <th className={""}></th>
                                 <th className={"text-sm text-gray-500 font-light"}>Name</th>
-                                <th className={"text-sm text-gray-500 font-light"}>Role</th>
+                                <th className={"text-sm text-gray-500 font-light"}>Type</th>
                                 <th className={"text-sm text-gray-500 font-light"}>Certificaciones</th>
-                                <th className={"text-sm text-gray-500 font-light"}>Ubicación</th>
-                                <th className={"text-sm text-gray-500 font-light"}>Info</th>
+
                             </tr>
                             </thead>
 
                             <tbody>
                             <PaginateItems dataToRender={currentItems} fieldsMap={{
                                 icon: "",
-                                first: "name",
-                                second: "role",
-                                third: "numCertifications",
-                                fourth: "location",
+                                first: "Name",
+                                second: "Type",
+                                third: null,
+                                fourth: null,
                             }} />
                             </tbody>
                         </table>

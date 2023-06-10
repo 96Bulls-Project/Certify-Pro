@@ -6,7 +6,7 @@ import axios from "axios";
 export default async function handler(req, res) {
     let start = Date.now();
     let result = {}
-    let cache = await redis.get('top5Employees');
+    let cache = await redis.get('employees');
     cache = JSON.parse(cache);
 
 

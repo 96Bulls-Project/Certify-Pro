@@ -5,15 +5,15 @@ function DetailCard({data, fieldsMap}) {
     const renderSubtitle = () => {
         if (Array.isArray(data[fieldsMap.subtitle])) {
             return (
-                <p className={"card_subtitle text-sm text-gray-500"}>
-                    {data[fieldsMap.subtitle].map(data => {
+                <div className={"card_subtitle text-sm text-gray-500"}>
+                    {data[fieldsMap.subtitle].map((data, i) => {
                         return (
-                            <span className={"mr-2"}>
+                            <span key={i + "-detail-field"} className={"mr-2"}>
                                 {data},
                             </span>
                         )
                     })}
-                </p>
+                </div>
             )
         } else {
             return (

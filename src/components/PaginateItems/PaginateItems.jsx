@@ -1,6 +1,7 @@
 import React from 'react';
+import OpenDetailsButton from "@/components/OpenDetailsButton/OpenDetailsButton";
 
-function Item ({data, fieldsMap}) {
+function Item({data, fieldsMap}) {
     return (
         <tr className="h-16" key={data.id}>
             <td>
@@ -10,25 +11,38 @@ function Item ({data, fieldsMap}) {
                 {data[fieldsMap.icon]}
             </td>
 
-            <td>
-                {data[fieldsMap.first]}
-            </td>
+            {
+                fieldsMap.first !== null ? (
+                    <td>
+                        {data[fieldsMap.first]}
+                    </td>
+                ) : null
+            }
 
-            <td className="text-gray-500">
-                {data[fieldsMap.second]}
-            </td>
+            {
+                fieldsMap.second !== null ? (
+                    <td className="text-gray-500">
+                        {data[fieldsMap.second]}
+                    </td>
+                ) : null
+            }
 
-            <td className="text-gray-500">
-                {data[fieldsMap.third]}
-            </td>
+            {
+                fieldsMap.third !== null ? (
+                    <td className="text-gray-500">
+                        {data[fieldsMap.third]}
+                    </td>) : null
+            }
 
-            <td className="text-gray-500">
-                {data[fieldsMap.fourth]}
-            </td>
+            {
+                fieldsMap.fourth !== null ? (
+                    <td className="text-gray-500">
+                        {data[fieldsMap.fourth]}
+                    </td>
+                ) : null
+            }
 
-            <td className="m-4">
-                <button className="bg-blue-600 text-white px-2 py-1 rounded">Ver mas</button>
-            </td>
+            <OpenDetailsButton />
 
         </tr>
     )
@@ -42,7 +56,7 @@ function PaginateItems({dataToRender, fieldsMap}) {
             ))}
         </>
 
-    
+
     );
 }
 

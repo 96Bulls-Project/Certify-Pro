@@ -14,8 +14,8 @@ function TopFiveCard({title, description, data, buttonDetails = {text: "Ver deta
                     loading ?
                         [0, 1, 2, 3, 4].map((l) => {
                             return (
-                                <div className={loading ? "loading" : ""}>
-                                    <DetailCard key={l} data={{}} fieldsMap={fieldsMap} />
+                                <div key={l} className={loading ? "loading" : ""}>
+                                    <DetailCard  data={{}} fieldsMap={fieldsMap} />
                                 </div>
                             )
                         })

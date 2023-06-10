@@ -11,6 +11,7 @@ import axios from "axios";
 import ReactPaginate from "react-paginate";
 import PaginateItems from "@/components/PaginateItems/PaginateItems";
 import useSWR from "swr";
+import OpenDetailsButton from "@/components/OpenDetailsButton/OpenDetailsButton";
 
 
 ChartJS.register(
@@ -185,7 +186,7 @@ export default function Employees() {
                           subtitle={"Aquí se visualiza el rendimiento general de los empleados."}
                     >
                         <div className={"h-full w-full pt-8"}>
-                            <Line options={options} data={data} width={400} height={"145px"} />
+                            <Line id="employees-graph" options={options} data={data} width={400} height={"145px"} />
                         </div>
                     </Card>
 
@@ -209,9 +210,7 @@ export default function Employees() {
                                         </div>
 
                                     </div>
-                                    <div className="m-4">
-                                        <button className="bg-blue-600 text-white px-2 py-1 rounded">Ver mas</button>
-                                    </div>
+                                    <OpenDetailsButton />
                                 </div>
                             ))}
                         </div>
