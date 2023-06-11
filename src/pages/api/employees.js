@@ -1,8 +1,6 @@
 import redis from "../../lib/redis";
 import axios from "axios";
 
-
-
 export default async function handler(req, res) {
     let start = Date.now();
     let result = {}

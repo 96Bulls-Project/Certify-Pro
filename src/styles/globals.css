@@ -64,6 +64,10 @@ h1 {
 	line-height : 32px;
 }
 
+.text-primary {
+	color : var(--primary-color);
+}
+
 /* ----- Letter Spacing */
 h1 {
 	letter-spacing : 3px;

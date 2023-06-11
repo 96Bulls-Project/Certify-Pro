@@ -47,6 +47,12 @@ export default function Dashboard() {
         top5CertificatesIsLoading
     } = useSWR('api/top5Certificates', fetcher);
 
+    const {
+        data: certificationsObtainedComparison,
+        error: certificationsObtainedComparisonError,
+        certificationsObtainedComparisonIsLoading
+    } = useSWR('api/certificationsObtainedComparison?year1=2021&year2=2022', fetcher);
+
     useEffect(() => {
         if (top5CertificatesIsLoading) {
             setIsFetchingData(true);
@@ -109,12 +115,12 @@ export default function Dashboard() {
         datasets: [
             {
                 label: '2021',
-                data: labels.map(() => faker.datatype.number({min: 0, max: 1000})),
+                data: certificationsObtainedComparison?.year1,
                 backgroundColor: '#3274B5',
             },
             {
                 label: '2022',
-                data: labels.map(() => faker.datatype.number({min: 0, max: 1000})),
+                data: certificationsObtainedComparison?.year2,
                 backgroundColor: '#48A0F8',
             },
         ],
@@ -151,7 +157,7 @@ export default function Dashboard() {
                                                     <Image src={"/icons/employees_summary_card.png"}
                                                            width={40}
                                                            height={40}
-                                                           className={"mr-2"} />
+                                                           className={"mr-2"}  alt="employee-icon"/>
                                                     <div className={'w-3/4'}>
                                                         <p className={'font-semibold'}>{item.name}</p>
                                                         <p className={'text-gray-500 text-sm'}>{item.role}</p>
@@ -194,7 +200,7 @@ export default function Dashboard() {
                             </ul>
                         </div>
                     </Card>
-                    <Card title={"Progreso de nuevas certificaciones al año"}
+                    <Card title={"Certificaciones Obtenidas 2021 vs 2022"}
                           subtitle={"Aquí se visualiza el progreso de las certificaciones de cada mes a lo largo del año."}>
                         <div className={'px-5 pt-10'}>
                             <Bar data={historicalDataGraph} options={historicalOptionsGraph} />

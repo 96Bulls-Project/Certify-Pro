@@ -6,7 +6,6 @@ import axios from "axios";
 import {useState} from "react";
 import Card from "@/components/Card/Card";
 import {Line} from "react-chartjs-2";
-import OpenDetailsButton from "@/components/OpenDetailsButton/OpenDetailsButton";
 import {CategoryScale, Chart as ChartJS, Filler, LinearScale, LineElement, PointElement, Title} from "chart.js";
 import useSWR from "swr";
 import DetailsPopup from "@/components/DetailsPopup/DetailsPopup";
@@ -38,42 +37,17 @@ export default function Certificates() {
         return res.data.data;
     });
 
-    const [isFetchingData, setIsFetchingData] = useState(true);
-    const [topTeams, settopTeams] = useState([
-        {
-            id: 1,
-            name: "Team 1",
-            numEmployees: 7,
-            numCertifications: 13,
-
-        },
-        {
-            id: 2,
-            name: "Team 2",
-            numEmployees: 15,
-            numCertifications: 12,
-
-        },
-        {
-            id: 3,
-            name: "Team 3",
-            numEmployees: 3,
-            numCertifications: 6,
-
-        },
-        {
-            id: 4,
-            name: "Team 4",
-            numEmployees: 6,
-            numCertifications: 10,
-
-        },
-    ]);
     const {
         data: certificates,
         error: certificatesError,
         certificatesIsLoading
     } = useSWR('/api/certificates', fetcher);
+
+    const {
+        data: top5CertificatesByCertificates,
+        error: top5CertificatesByCertificatesError,
+        top5CertificatesByCertificatesIsLoading
+    } = useSWR('/api/top5SkillsByCertificates', fetcher);
 
     const options = {
         responsive: true,
@@ -162,26 +136,22 @@ export default function Certificates() {
                         </Card>
 
                         <Card className="h-full"
-                              title={"Certificados destacados"}
-                              subtitle={"Aquí se muestran los certificados con los que mas cuenta la empresa."}>
-                            <div className="">
-                                {topTeams?.map(team => (
-                                    <div className="flex items-center justify-between" key={team.id}>
-                                        <div className="flex items-center m-4 mb-1">
-                                            <div className="rounded-full w-10 h-10 bg-slate-600">
-                                                {team.icon}
-                                            </div>
-                                            <div className="ml-4">
-                                                <div>
-                                                    {team.name}
-                                                </div>
-                                                <div className="text-gray-500">
-                                                    {team.date}
-                                                </div>
-                                            </div>
+                              title={"Top Skills"}
+                              subtitle={"Aquí se muestran las skills más desarrolladas de acuerdo a certificados realizados."}>
+                            <div className="p-5">
+                                {top5CertificatesByCertificates?.map((skill, i) => (
+                                    <div className="flex items-center py-2" key={i + "-" + skill}>
+                                        <p className={"text-gray-500 mr-3"}>{i + 1}.</p>
+                                        <div className="flex items-center justify-between w-full">
+                                            <p className={"text-xl  text-primary"}>
+                                                {skill.name}
+                                            </p>
+                                            <p className="font-semibold text-gray-500">
+                                                {skill.value}
+                                            </p>
 
                                         </div>
-                                        <OpenDetailsButton />
+                                        <hr/>
                                     </div>
                                 ))}
                             </div>
