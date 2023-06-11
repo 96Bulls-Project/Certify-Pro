@@ -1,45 +1,26 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import OpenDetailsButton from "@/components/OpenDetailsButton/OpenDetailsButton";
 
-function Item({data, fieldsMap}) {
+function Item({data, fieldsMapValues}) {
     return (
         <tr className="h-16" key={data.id}>
             <td>
                 <div className="flex justify-center">
                     <div className="rounded-full w-10 h-10 bg-slate-600"></div>
                 </div>
-                {data[fieldsMap.icon]}
             </td>
 
             {
-                fieldsMap.first !== null ? (
-                    <td>
-                        {data[fieldsMap.first]}
-                    </td>
-                ) : null
-            }
+                fieldsMapValues.map((field, i) => {
+                    return (
+                        <Fragment key={i + "-field"}>
+                            <td className="text-gray-500">
+                                {data[field]}
+                            </td>
+                        </Fragment>
+                    )
 
-            {
-                fieldsMap.second !== null ? (
-                    <td className="text-gray-500">
-                        {data[fieldsMap.second]}
-                    </td>
-                ) : null
-            }
-
-            {
-                fieldsMap.third !== null ? (
-                    <td className="text-gray-500">
-                        {data[fieldsMap.third]}
-                    </td>) : null
-            }
-
-            {
-                fieldsMap.fourth !== null ? (
-                    <td className="text-gray-500">
-                        {data[fieldsMap.fourth]}
-                    </td>
-                ) : null
+                })
             }
 
             <OpenDetailsButton />
@@ -48,15 +29,15 @@ function Item({data, fieldsMap}) {
     )
 }
 
-function PaginateItems({dataToRender, fieldsMap}) {
+function PaginateItems({dataToRender, fieldsMapValues}) {
     return (
         <>
             {dataToRender?.map(data => (
-                <Item data={data} fieldsMap={fieldsMap} />
+                <Fragment key={data._id + '-item'}>
+                    <Item data={data} fieldsMapValues={fieldsMapValues} />
+                </Fragment>
             ))}
         </>
-
-
     );
 }
 

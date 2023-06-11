@@ -12,6 +12,7 @@ import ReactPaginate from "react-paginate";
 import PaginateItems from "@/components/PaginateItems/PaginateItems";
 import useSWR from "swr";
 import OpenDetailsButton from "@/components/OpenDetailsButton/OpenDetailsButton";
+import PaginateTable from "@/components/PaginateTable/PaginateTable";
 
 
 ChartJS.register(
@@ -42,10 +43,7 @@ export default function Employees() {
             'Server': 'gunicorn'
         }
     }).then((res) => {
-        console.log(res)
-        const parsedData = JSON.parse(res.data.data);
-        console.log(parsedData);
-        return JSON.parse(res.data.data);
+        return res.data.data;
     });
 
     const [isFetchingData, setIsFetchingData] = useState(true);
@@ -95,8 +93,6 @@ export default function Employees() {
             numCertifications: faker.number.int(100),
         })
     }
-
-    const [itemOffset, setItemOffset] = useState(0);
 
     const options = {
         responsive: true,
@@ -161,18 +157,6 @@ export default function Employees() {
     if (status === 'loading') {
         return <Loading />
     }
-    const itemsPerPage = 5
-
-    const endOffset = itemOffset + itemsPerPage;
-    console.log(`Loading items from ${itemOffset} to ${endOffset}`);
-    const currentItems = employees?.slice(itemOffset, endOffset);
-    const pageCount = Math.ceil(employees?.length / itemsPerPage);
-
-    // Invoke when user click to request another page.
-    const handlePageClick = (event) => {
-        const newOffset = (event.selected * itemsPerPage) % employees?.length;
-        setItemOffset(newOffset);
-    };
 
     if (session?.user) {
         return (
@@ -222,44 +206,13 @@ export default function Employees() {
 
                     <Card title={"Lista de empleados"}
                           subtitle={"Aquí se visualiza la lista con todos los empleados, asi como su status y roles."}>
-                        <table className="table-auto w-full text-left mt-4">
-                            <thead>
-                            <tr>
-                                <th className={""}></th>
-                                <th className={"text-sm text-gray-500 font-light"}>Name</th>
-                                <th className={"text-sm text-gray-500 font-light"}>Role</th>
-                                <th className={"text-sm text-gray-500 font-light"}>Certificaciones</th>
-                                <th className={"text-sm text-gray-500 font-light"}>Ubicación</th>
-                                <th className={"text-sm text-gray-500 font-light"}>Info</th>
-                            </tr>
-                            </thead>
-
-                            <tbody>
-                            <PaginateItems dataToRender={currentItems} fieldsMap={{
-                                icon: "",
-                                first: "name",
-                                second: "role",
-                                third: "numCertifications",
-                                fourth: "location",
-                            }} />
-                            </tbody>
-                        </table>
-
-                        <hr />
-
-                        <div className="p-5 text-center">
-                            <ReactPaginate
-                                className="flex items-center justify-between w-1/2 m-auto"
-                                pageCount={pageCount}
-                                           nextLabel=">"
-                                           previousLabel="<"
-                                           renderOnZeroPageCount={null}
-                                           onPageChange={handlePageClick}
-                                           breakLabel="..."
-                            />
-
-                        </div>
-
+                        <PaginateTable data={employees} fieldsMap={{
+                            Name: "name",
+                            Role: "role",
+                            "Certificaciónes": "numCertifications",
+                            "Ubicación": "location",
+                        }}
+                                       itemsPerPage={5} />
                     </Card>
                 </div>
             </Layout>
