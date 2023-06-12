@@ -13,6 +13,7 @@ import PaginateItems from "@/components/PaginateItems/PaginateItems";
 import useSWR from "swr";
 import OpenDetailsButton from "@/components/OpenDetailsButton/OpenDetailsButton";
 import PaginateTable from "@/components/PaginateTable/PaginateTable";
+import DetailsPopup from "@/components/DetailsPopup/DetailsPopup";
 
 
 ChartJS.register(
@@ -35,14 +36,8 @@ export default function Employees() {
         }
     });
 
-    const fetcher = (url) => axios(url, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Server': 'gunicorn'
-        }
-    }).then((res) => {
+    const fetcher = (url) => axios(url).then((res) => {
+        console.log(res.data.data)
         return res.data.data;
     });
 
@@ -77,13 +72,13 @@ export default function Employees() {
 
         },
     ]);
-    /*const {
+    const {
         data: employees,
         error: employeesError,
         employeesIsLoading
-    } = useSWR('/api/employees', fetcher);*/
+    } = useSWR('/api/employees', fetcher);
 
-    const employees = [];
+    /*const employees = [];
     for (let i = 0; i < 100; i++) {
         employees.push({
             id: i,
@@ -92,7 +87,7 @@ export default function Employees() {
             location: faker.location.city(),
             numCertifications: faker.number.int(100),
         })
-    }
+    }*/
 
     const options = {
         responsive: true,
@@ -160,62 +155,70 @@ export default function Employees() {
 
     if (session?.user) {
         return (
-            <Layout user={session?.user} grid={"grid-r-1-1-4"}>
-                <PageTitle>Empleados</PageTitle>
+            <>
+                <DetailsPopup />
+                <Layout user={session?.user} grid={"grid-r-1-1-4"}>
+                    <PageTitle>Empleados</PageTitle>
 
-                <div className="c-full grid-c-4-2 ">
+                    <div className="c-full grid-c-4-2 ">
 
-                    <Card className="h-full"
-                          title={"Rendimiento de empleados"}
-                          subtitle={"Aquí se visualiza el rendimiento general de los empleados."}
-                    >
-                        <div className={"h-full w-full pt-8"}>
-                            <Line id="employees-graph" options={options} data={data} width={400} height={"145px"} />
-                        </div>
-                    </Card>
+                        <Card className="h-full"
+                              title={"Rendimiento de empleados"}
+                              subtitle={"Aquí se visualiza el rendimiento general de los empleados."}
+                        >
+                            <div className={"h-full w-full pt-8"}>
+                                <Line id="employees-graph" options={options} data={data} width={400} height={"145px"} />
+                            </div>
+                        </Card>
 
-                    <Card className="h-full"
-                          title={"Equipos destacados"}
-                          subtitle={"Aquí se muestran los equipos con mayor cantidad de certificados así como de puntajes."}>
-                        <div className="">
-                            {topTeams?.map(team => (
-                                <div className="flex items-center justify-between" key={team.id}>
-                                    <div className="flex items-center m-4 mb-1">
-                                        <div className="rounded-full w-10 h-10 bg-slate-600">
-                                            {team.icon}
-                                        </div>
-                                        <div className="ml-4">
-                                            <div>
-                                                {team.name}
+                        <Card className="h-full"
+                              title={"Equipos destacados"}
+                              subtitle={"Aquí se muestran los equipos con mayor cantidad de certificados así como de puntajes."}>
+                            <div className="">
+                                {topTeams?.map(team => (
+                                    <div className="flex items-center justify-between" key={team.id}>
+                                        <div className="flex items-center m-4 mb-1">
+                                            <div className="rounded-full w-10 h-10 bg-slate-600">
+                                                {team.icon}
                                             </div>
-                                            <div className="text-gray-500">
-                                                {team.date}
+                                            <div className="ml-4">
+                                                <div>
+                                                    {team.name}
+                                                </div>
+                                                <div className="text-gray-500">
+                                                    {team.date}
+                                                </div>
                                             </div>
-                                        </div>
 
+                                        </div>
+                                        <OpenDetailsButton />
                                     </div>
-                                    <OpenDetailsButton />
-                                </div>
-                            ))}
-                        </div>
-                    </Card>
+                                ))}
+                            </div>
+                        </Card>
 
-                </div>
+                    </div>
 
-                <div className="c-full">
+                    <div className="c-full">
 
-                    <Card title={"Lista de empleados"}
-                          subtitle={"Aquí se visualiza la lista con todos los empleados, asi como su status y roles."}>
-                        <PaginateTable data={employees} fieldsMap={{
-                            Name: "name",
-                            Role: "role",
-                            "Certificaciónes": "numCertifications",
-                            "Ubicación": "location",
-                        }}
-                                       itemsPerPage={5} />
-                    </Card>
-                </div>
-            </Layout>
+                        <Card title={"Lista de empleados"}
+                              subtitle={"Aquí se visualiza la lista con todos los empleados, asi como su status y roles."}>
+                            <div className={"px-5"}>
+                                <PaginateTable data={employees}
+                                               fieldsMap={{
+                                                   Id: "UserId",
+                                                   Nombre: "Name",
+                                                   "No. Certificados": "TotalCertifications",
+                                                   "Ubicación": "WorkLocation",
+                                               }}
+                                               itemsPerPage={5}
+                                               canOpenDetails={true}
+                                               type={"employees"} />
+                            </div>
+                        </Card>
+                    </div>
+                </Layout>
+            </>
         )
     }
 }

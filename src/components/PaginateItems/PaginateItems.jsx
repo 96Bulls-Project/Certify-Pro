@@ -1,14 +1,17 @@
 import React, {Fragment} from 'react';
 import OpenDetailsButton from "@/components/OpenDetailsButton/OpenDetailsButton";
 
-function Item({data, fieldsMapValues}) {
+function Item({hasIcon, canOpenDetails, data, fieldsMapValues, type}) {
     return (
         <tr className="h-16" key={data.id}>
-            <td>
-                <div className="flex justify-center">
-                    <div className="rounded-full w-10 h-10 bg-slate-600"></div>
-                </div>
-            </td>
+            {hasIcon ?
+                (
+                    <td>
+                        <div className="flex justify-center">
+                            <div className="rounded-full w-10 h-10 bg-slate-600"></div>
+                        </div>
+                    </td>) : null
+            }
 
             {
                 fieldsMapValues.map((field, i) => {
@@ -22,19 +25,20 @@ function Item({data, fieldsMapValues}) {
 
                 })
             }
-
-            <OpenDetailsButton />
+            {canOpenDetails ? (
+                <OpenDetailsButton data={data} type={type}/>
+            ) : null}
 
         </tr>
     )
 }
 
-function PaginateItems({dataToRender, fieldsMapValues}) {
+function PaginateItems({dataToRender, canOpenDetails, fieldsMapValues, type}) {
     return (
         <>
             {dataToRender?.map(data => (
                 <Fragment key={data._id + '-item'}>
-                    <Item data={data} fieldsMapValues={fieldsMapValues} />
+                    <Item data={data} canOpenDetails={canOpenDetails} fieldsMapValues={fieldsMapValues} type={type} />
                 </Fragment>
             ))}
         </>

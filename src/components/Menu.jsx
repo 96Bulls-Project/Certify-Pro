@@ -5,7 +5,7 @@ import Link from "next/link";
 import {AppContext} from "@/context/AppProvider";
 
 function Menu({user}) {
-    const [active, setActive] = useContext(AppContext)
+    const [state, setState] = useContext(AppContext)
     const menuItems = [
         {
             icon: 'home_alt_fill',
@@ -32,12 +32,11 @@ function Menu({user}) {
     const router = useRouter();
 
     return (
-        <div id="menu" className={"flex flex-col justify-between" + (active ? " active " : "")}>
+        <div id="menu" className={"flex flex-col justify-between" + (state.isMenuOpen ? " active " : "")}>
             <div>
                 <div id="menu-top">
                     <img src={"/icons/hamburger.png"} alt="hamburger" onClick={() => {
-                        setActive(!active);
-                        console.log(!active)
+                        setState({...state, isMenuOpen: !state.isMenuOpen});
                     }} />
                 </div>
                 <ul id="menu-items" className="bottom-0 mt-36">

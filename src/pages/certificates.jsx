@@ -3,7 +3,6 @@ import {signIn, useSession} from "next-auth/react";
 import Layout from "@/components/Layout";
 import Loading from "@/components/Loading/Loading";
 import axios from "axios";
-import {useState} from "react";
 import Card from "@/components/Card/Card";
 import {Line} from "react-chartjs-2";
 import {CategoryScale, Chart as ChartJS, Filler, LinearScale, LineElement, PointElement, Title} from "chart.js";
@@ -16,6 +15,7 @@ ChartJS.register(
     LinearScale,
     PointElement,
     LineElement,
+
     Filler,
     Title,
 );
@@ -49,17 +49,23 @@ export default function Certificates() {
         top5CertificatesByCertificatesIsLoading
     } = useSWR('/api/top5SkillsByCertificates', fetcher);
 
+    const {
+        data: totalAccumulatedCertificates,
+        error: totalAccumulatedCertificatesError,
+        totalAccumulatedCertificatesIsLoading
+    } = useSWR('api/certificationsObtainedComparison?year1=2022&year2=2023&accum=true', fetcher);
+
     const options = {
         responsive: true,
         title: {
             display: false,
         },
         legend: {
-            display: false,
+            display: true,
         },
         interaction: {
-            intersect: false,
-            mode: false,
+            intersect: true,
+            mode: 'point'
         },
         scales: {
             x: {
@@ -95,12 +101,21 @@ export default function Certificates() {
     };
 
     const data = {
-        labels: ["", "", "", ""],
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
         datasets: [
             {
-                label: "certificates",
+                label: "2022",
                 fill: true,
-                data: [7, 13, 39, 11],
+                data: totalAccumulatedCertificates?.year1,
+                borderColor: '#9ABAF5',
+                backgroundColor: 'rgba(15, 98, 254, 0.1)',
+                tension: 0.4,
+                pointRadius: 0,
+            },
+            {
+                label: "2023",
+                fill: true,
+                data: totalAccumulatedCertificates?.year2,
                 borderColor: '#0F62FE',
                 backgroundColor: 'rgba(15, 98, 254, 0.1)',
                 tension: 0.4,
@@ -151,7 +166,7 @@ export default function Certificates() {
                                             </p>
 
                                         </div>
-                                        <hr/>
+                                        <hr />
                                     </div>
                                 ))}
                             </div>
@@ -163,13 +178,16 @@ export default function Certificates() {
 
                         <Card title={"Lista de Certificados"}
                               subtitle={"Aquí se visualiza la lista con todos los certificados"}>
-
-                            <PaginateTable data={certificates}
-                                           fieldsMap={{
-                                               Name: "Name",
-                                               Type: "Type",
-                                           }}
-                                           pageCount={5} />
+                            <div className={"px-5"}>
+                                <PaginateTable data={certificates}
+                                               fieldsMap={{
+                                                   Name: "Name",
+                                                   Type: "Type",
+                                               }}
+                                               pageCount={5}
+                                               canOpenDetails={true}
+                                               type={"certificates"} />
+                            </div>
                         </Card>
                     </div>
                 </Layout>

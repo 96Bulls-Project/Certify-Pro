@@ -2,7 +2,7 @@ import React, {Fragment, useState} from 'react';
 import PaginateItems from "@/components/PaginateItems/PaginateItems";
 import ReactPaginate from "react-paginate";
 
-function PaginateTable({data = [], itemsPerPage = 5, fieldsMap = {}}) {
+function PaginateTable({hasIcon, canOpenDetails, data = [], type, itemsPerPage = 5, fieldsMap = {}}) {
     const [itemOffset, setItemOffset] = useState(0);
 
     // Invoke when user click to request another page.
@@ -15,7 +15,6 @@ function PaginateTable({data = [], itemsPerPage = 5, fieldsMap = {}}) {
     const pageCount = Math.ceil(data?.length / itemsPerPage);
     const currentItems = data.length > 0 ? data.slice(itemOffset, endOffset) : [];
 
-
     const fieldsMapKeys = Object.keys(fieldsMap);
     const fieldsMapValues = Object.values(fieldsMap);
 
@@ -25,7 +24,9 @@ function PaginateTable({data = [], itemsPerPage = 5, fieldsMap = {}}) {
             <table className="table-auto w-full text-left mt-4">
                 <thead>
                 <tr>
-                    <th className={""}></th>
+                    {hasIcon ? (
+                        <th className={""}></th>
+                    ) : null}
                     {data.length > 0 ?
                         (fieldsMapKeys.map(field => {
                             return (
@@ -41,7 +42,11 @@ function PaginateTable({data = [], itemsPerPage = 5, fieldsMap = {}}) {
 
                 <tbody>
                 {data.length > 0 ?
-                    <PaginateItems dataToRender={currentItems} fieldsMapValues={fieldsMapValues} />
+                    <PaginateItems hasIcon={hasIcon}
+                                   canOpenDetails={canOpenDetails}
+                                   dataToRender={currentItems}
+                                   fieldsMapValues={fieldsMapValues}
+                                   type={type} />
                     : null}
 
                 </tbody>
