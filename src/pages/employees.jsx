@@ -2,18 +2,13 @@ import PageTitle from "@/components/PageTitle";
 import {signIn, useSession} from "next-auth/react";
 import Layout from "@/components/Layout";
 import Loading from "@/components/Loading/Loading";
-import {useState, useEffect} from "react";
+import {useState, useContext} from "react";
 import {Line} from "react-chartjs-2";
 import {CategoryScale, Chart as ChartJS, Filler, LinearScale, LineElement, PointElement, Title} from "chart.js";
 import Card from "@/components/Card/Card";
-import {faker} from "@faker-js/faker";
-import axios from "axios";
-import ReactPaginate from "react-paginate";
-import PaginateItems from "@/components/PaginateItems/PaginateItems";
-import useSWR from "swr";
 import OpenDetailsButton from "@/components/OpenDetailsButton/OpenDetailsButton";
 import PaginateTable from "@/components/PaginateTable/PaginateTable";
-import DetailsPopup from "@/components/DetailsPopup/DetailsPopup";
+import {AppContext} from "@/context/AppProvider";
 
 
 ChartJS.register(
@@ -36,12 +31,6 @@ export default function Employees() {
         }
     });
 
-    const fetcher = (url) => axios(url).then((res) => {
-        console.log(res.data.data)
-        return res.data.data;
-    });
-
-    const [isFetchingData, setIsFetchingData] = useState(true);
     const [topTeams, settopTeams] = useState([
         {
             id: 1,
@@ -72,22 +61,7 @@ export default function Employees() {
 
         },
     ]);
-    const {
-        data: employees,
-        error: employeesError,
-        employeesIsLoading
-    } = useSWR('/api/employees', fetcher);
-
-    /*const employees = [];
-    for (let i = 0; i < 100; i++) {
-        employees.push({
-            id: i,
-            name: faker.person.firstName(),
-            role: faker.person.jobArea(),
-            location: faker.location.city(),
-            numCertifications: faker.number.int(100),
-        })
-    }*/
+    const [state, setState] = useContext(AppContext);
 
     const options = {
         responsive: true,
@@ -149,14 +123,15 @@ export default function Employees() {
         ],
     };
 
-    if (status === 'loading') {
+
+    if (status === 'loading' || state.employees.length === 0) {
         return <Loading />
     }
 
     if (session?.user) {
         return (
             <>
-                <DetailsPopup />
+
                 <Layout user={session?.user} grid={"grid-r-1-1-4"}>
                     <PageTitle>Empleados</PageTitle>
 
@@ -204,7 +179,7 @@ export default function Employees() {
                         <Card title={"Lista de empleados"}
                               subtitle={"Aquí se visualiza la lista con todos los empleados, asi como su status y roles."}>
                             <div className={"px-5"}>
-                                <PaginateTable data={employees}
+                                <PaginateTable data={state?.employees}
                                                fieldsMap={{
                                                    Id: "UserId",
                                                    Nombre: "Name",
