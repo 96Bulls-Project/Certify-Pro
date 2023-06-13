@@ -5,9 +5,6 @@ function OpenDetailsButton({data, type}) {
     const [state, setState] = useContext(AppContext)
 
     const handleOpen = () => {
-        console.log("Open Details")
-        console.log(data, type)
-
         setState({
             ...state,
             isDetailsPopupOpen: true,

@@ -7,8 +7,9 @@ import Card from "@/components/Card/Card";
 import {Line} from "react-chartjs-2";
 import {CategoryScale, Chart as ChartJS, Filler, LinearScale, LineElement, PointElement, Title} from "chart.js";
 import useSWR from "swr";
-import DetailsPopup from "@/components/DetailsPopup/DetailsPopup";
 import PaginateTable from "@/components/PaginateTable/PaginateTable";
+import {useContext} from "react";
+import {AppContext} from "@/context/AppProvider";
 
 ChartJS.register(
     CategoryScale,
@@ -37,11 +38,7 @@ export default function Certificates() {
         return res.data.data;
     });
 
-    const {
-        data: certificates,
-        error: certificatesError,
-        certificatesIsLoading
-    } = useSWR('/api/certificates', fetcher);
+    const [state, setState] = useContext(AppContext);
 
     const {
         data: top5CertificatesByCertificates,
@@ -124,14 +121,13 @@ export default function Certificates() {
         ],
     };
 
-    if (status === 'loading') {
+    if (status === 'loading' || state.certificates.length === 0) {
         return <Loading />
     }
 
     if (session?.user) {
         return (
             <>
-                <DetailsPopup />
                 <Layout user={session?.user} grid={"grid-r-1-1-4"}>
                     <PageTitle>Certificados</PageTitle>
 
@@ -179,7 +175,7 @@ export default function Certificates() {
                         <Card title={"Lista de Certificados"}
                               subtitle={"Aquí se visualiza la lista con todos los certificados"}>
                             <div className={"px-5"}>
-                                <PaginateTable data={certificates}
+                                <PaginateTable data={state?.certificates}
                                                fieldsMap={{
                                                    Name: "Name",
                                                    Type: "Type",

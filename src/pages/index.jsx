@@ -1,5 +1,5 @@
 import {useSession, signIn, signOut} from "next-auth/react"
-import {useEffect, useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import Layout from "@/components/Layout";
 import PageTitle from "../components/PageTitle";
 import InfiniteScroll from "@/components/InfiniteScroll";
@@ -9,6 +9,7 @@ import TopFiveCard from "@/components/TopCard/TopFiveCard";
 import axios from "axios";
 import Loading from "@/components/Loading/Loading";
 import useSWR from "swr";
+import {AppContext} from "@/context/AppProvider";
 
 export default function Home() {
     const [isFetchingData, setIsFetchingData] = useState(true);
@@ -22,6 +23,7 @@ export default function Home() {
             });
         }
     });
+    const [state, setState] = useContext(AppContext);
 
     const fetcher = (url) => axios(url).then((res) => {
         console.log(res)
@@ -41,7 +43,7 @@ export default function Home() {
         }
     }, [top5EmployeesIsLoading, top5CertificatesIsLoading])
 
-    if (status === 'loading') {
+    if (status === 'loading' || state.isFetchingData) {
         return <Loading />
     }
 

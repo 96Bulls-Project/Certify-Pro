@@ -442,7 +442,20 @@ button:disabled {
 
 #details-popup .card{
 	width: 500px;
-	height: 600px;
+	height: fit-content;
+}
+
+/* ----- Search bar Results */
+#search-bar-results {
+	position        : absolute;
+	top             : 100%;
+	left            : 50%;
+	width: 120%;
+	transform : translateX(-50%);
+	transition: all 0.5s ease-in-out;
+	background-color : var(--cards-background);
+	border-radius    : 0 0 10px 10px;
+	border           : solid 1px var(--gray-5);
 }
 
 /* ----- Loading */
